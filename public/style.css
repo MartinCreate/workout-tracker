@@ -1,0 +1,454 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    /* height: 100%; */
+}
+body {
+    /* background-color: wheat; */
+    font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
+        sans-serif;
+    /* height: 100%; */
+}
+
+main,
+.welcome-component {
+    height: 100%;
+    width: 100%;
+}
+/* -------------------------- general ------------------------------------------------------- */
+.form h3,
+.form-desc,
+.home-menu-el p {
+    color: #1a4fc2;
+}
+
+.welcome-component,
+.welcome-backdrop,
+.component-container,
+.component,
+.form,
+.home-menu-el {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.component-container {
+    border: 1px blue solid;
+    height: 100%;
+}
+.component {
+    border: 1px red solid;
+    width: 100%;
+    margin-top: 10%;
+}
+
+/* -------------------------- welcome ------------------------------------------------------- */
+
+.welcome-backdrop {
+    color: #1844a3;
+}
+
+.welcome-backdrop h1,
+.welcome-backdrop p {
+    margin-bottom: 20px;
+}
+
+.welcome-backdrop h1 {
+    margin-top: 15%;
+}
+
+/* -------------------------- Form ------------------------------------------------------- */
+/*
+Input field focus border-animation from (effect 2):
+https://codepen.io/Takumari85/pen/RaYwpJ
+*/
+
+.form {
+    /* background-color: whitesmoke; */
+    /* border: 1px #1a4fc2 solid; */
+    border-radius: 10px;
+    font-size: 20px;
+    margin: 20px 50px 40px;
+    padding: 20px 0px 0px;
+    box-shadow: 0px 0px 10px 0px #1a4fc260;
+}
+
+.form h3 {
+    /* border: 1px solid red; */
+    margin: 0 0 10px;
+    font-size: 30px;
+    font-weight: 400;
+}
+
+.form-desc {
+    max-width: 400px;
+    text-align: center;
+    margin: 20px 50px 50px;
+}
+
+.input-field-div {
+    /* border: 1px blue solid; */
+    margin: 15px 50px;
+    position: relative;
+}
+
+.input-field-div input {
+    border: none;
+    border-bottom: 1px #1a4fc260 solid;
+    font-size: 20px;
+    background-color: rgba(240, 255, 255, 0);
+    height: 30px;
+    width: 300px;
+}
+.input-field-div input:focus {
+    outline: none;
+}
+
+.input-field-div input:focus ~ .focus-border {
+    width: 100%;
+    transition: 0.4s;
+    left: 0;
+}
+.focus-border {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background-color: #1a4fc2;
+    transition: 0.4s;
+}
+
+.input-field-div input::placeholder {
+    font-size: 16px;
+    color: #1a4fc28e;
+}
+
+.form button {
+    border: none;
+    /* border: 1px rgba(245, 245, 245, 0.295) solid; */
+    border-top: none;
+    border-bottom-right-radius: 8px;
+    border-bottom-left-radius: 8px;
+    background: linear-gradient(to bottom, #1a4fc2ce 0%, #1a4fc2 100%);
+    filter: contrast(80%);
+    color: whitesmoke;
+    width: 100%;
+    margin: 20px 0 0;
+    padding: 10px;
+    font-size: 20px;
+    cursor: pointer;
+}
+.form button:hover {
+    filter: contrast(100%);
+}
+.form button:focus {
+    outline: none;
+    filter: contrast(150%);
+}
+
+.error-message {
+    color: red;
+    text-align: center;
+    margin: 10px;
+}
+
+.success {
+    color: green;
+    font-size: 30px;
+    margin: 20px;
+}
+
+/* -------------------------- /register /login specifics ------------------------------------------------------- */
+
+.toggle-comps {
+    /* border: 1px red solid; */
+    color: rgb(162, 162, 162);
+    font-size: 16px;
+    margin: 0 0 20px;
+}
+
+#to-reset {
+    color: grey;
+}
+
+/* -------------------------- home screen ------------------------------------------------------- */
+
+.component-container {
+    height: 100%;
+    width: 100%;
+}
+
+#home-menu-container {
+    /* border: 2px #1a4fc2 solid; */
+    border-radius: 30px;
+    padding: 100px 20px;
+    min-width: 244px;
+    width: 80%;
+    /* box-shadow: 0px 0px 10px 0px #1a4fc260; */
+    /* display: flex;
+    align-items: center;
+    justify-content: space-evenly; */
+
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(202px, 33%));
+    /* grid-auto-rows: 00px; */
+    align-items: center;
+    justify-items: center;
+}
+
+.home-menu-link {
+    text-decoration: none;
+}
+
+.home-menu-el {
+    border: 1px #1a4fc22f solid;
+    border-radius: 50px;
+    box-shadow: 0px 0px 10px 0px #1a4fc260;
+    padding: 0 20px;
+
+    width: 200px;
+    height: 200px;
+}
+.home-menu-el:hover {
+    background-color: whitesmoke;
+}
+.home-menu-el p {
+    font-size: 20px;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 20px;
+}
+.home-menu-el img {
+    height: 50px;
+    width: 50px;
+    object-fit: contain;
+}
+
+/* -------------------------- Create-Workout ------------------------------------------------------- */
+#wo-creator-component {
+    width: 90%;
+}
+
+.collapse {
+    /* border: none; */
+    display: none;
+    /* display needs to be 'none'. it will be toggled to 'grid' upon button press*/
+    display: grid;
+    /* max-height: 0; */
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
+}
+
+#create-workout {
+    border: 1px grey solid;
+    border-radius: 20px;
+    margin: 20px 0 0;
+    padding: 10px 50px;
+    cursor: pointer;
+}
+#create-workout:hover {
+    background-color: grey;
+}
+#wo-creator {
+    border: 1px green solid;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 30px 0;
+    padding: 10px;
+}
+
+.new-workout {
+    /* border: 1px red solid; */
+    background-color: rgba(0, 255, 255, 0.233);
+    background-color: whitesmoke;
+    box-shadow: 0px 0px 10px 5px #1a4fc260;
+
+    margin-bottom: 10px;
+}
+/* :root {
+    --speed: 500ms;
+} */
+
+/* --------------------- Workout Nav Bar ------------------------------ */
+.workout-nav {
+    /* border: 1px blue solid; */
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.new-workout {
+    border-radius: 20px;
+}
+.workout-nav {
+    /* border: 2px #1a4fc2 solid; */
+    /* border-bottom: 1px #1a4fc2 solid; */
+    border-radius: 20px 20px 0 0;
+}
+.wo-name {
+    border: none;
+    border-right: 1px #1a4fc288 solid;
+    border-top-left-radius: 20px;
+    font-weight: bold;
+    color: black;
+    padding: 5px 20px;
+    /* text-align: center; */
+}
+.wo-name:focus {
+    outline: none;
+}
+
+/* TRYING OUT COLLAPSIBLES */
+/*
+https://www.w3schools.com/howto/howto_js_collapsible.asp
+*/
+
+.wo-tags-div {
+}
+
+.toggle-tags {
+    border: none;
+
+    width: 100%;
+    cursor: pointer;
+}
+.wo-tags {
+    /*display is 'grid', but for collapse we start it at 'none' */
+    /* display: grid; */
+    display: none;
+    grid-template-rows: 30px auto;
+    width: 100%;
+}
+
+.wo-tag-add {
+    border: 1px grey solid;
+    border-top: none;
+    /* border-left: 1px grey solid; */
+
+    cursor: pointer;
+}
+
+.wo-tag {
+    display: grid;
+    grid-template-columns: 70% 30%;
+}
+.wo-tag-input {
+    grid-column: 1 / span 1;
+    outline: none;
+    border: 1px grey solid;
+    border-top: none;
+    height: 30px;
+    padding: 0 10px;
+}
+.wo-tag-del {
+    grid-column: 2 / span 1;
+    border: none;
+    border-right: 1px grey solid;
+    border-bottom: 1px grey solid;
+    cursor: pointer;
+}
+
+/* .wo-tags input:first-child {
+    border: 1px red solid;
+    grid-column: 1 / span 2;
+} */
+
+.wo-remove:hover,
+.toggle-tags:hover {
+    background-color: lightgrey;
+}
+.wo-remove {
+    border: none;
+    /* border-top: 2px grey solid;
+    border-right: 2px grey solid; */
+    border-left: 1px #1a4fc288 solid;
+    border-top-right-radius: 17.8px;
+    cursor: pointer;
+}
+.toggle-tags,
+.wo-name,
+.wo-remove {
+    outline: none;
+    color: #1a4fc2;
+    font-size: 18px;
+    height: 50px;
+    background-color: white;
+    border-bottom: 1px #1a4fc2 solid;
+}
+.wo-name {
+    color: black;
+}
+
+/* --------------------- Exercise ------------------------------ */
+.toggle-exers {
+    /* border: 2px#1a4fc2 solid; */
+    border: none;
+    border-bottom: 1px#1a4fc2 solid;
+    outline: none;
+    width: 100%;
+    height: 30px;
+    cursor: pointer;
+}
+.active,
+.toggle-exers:hover {
+    background-color: lightgrey;
+}
+
+.exercises-div {
+    /* border: 2px #1a4fc2 solid; */
+    border-top: none;
+    border-radius: 0 0 10px 10px;
+    display: grid;
+    grid-template-rows: 40px 1fr;
+    padding: 0 10px;
+    background-color: white;
+}
+
+.exer-add {
+    border: 2px grey solid;
+    border-radius: 20px;
+    grid-row: 1 / span 1;
+    justify-self: center;
+    margin: 10px 0;
+    height: 30px;
+    width: 30%;
+    font-size: 16px;
+    cursor: pointer;
+}
+.exer-add:hover {
+    background-color: white;
+}
+
+.exer-div {
+    border: 1px blue solid;
+    grid-row: 2 / span 1;
+    margin: 10px 0;
+}
+
+.exer-name-input {
+    font-weight: bold;
+    height: 30px;
+    width: 40%;
+}
+
+/* ----------------------------------------------- Phone Styling ---------------------------------------------------------- */
+@media screen and (min-width: 100px) and (max-width: 920px) {
+    #home-menu-container {
+        /* border: 1px red solid; */
+        grid-template-columns: 1fr;
+        padding: 0;
+        margin: 30px 0;
+    }
+    .home-menu-el {
+        margin: 10px 0;
+    }
+}
