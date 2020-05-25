@@ -7,6 +7,9 @@
 button {
     cursor: pointer;
 }
+button:hover {
+    background-color: white;
+}
 
 html,
 body {
@@ -198,14 +201,9 @@ https://codepen.io/Takumari85/pen/RaYwpJ
     padding: 100px 20px;
     min-width: 244px;
     width: 80%;
-    /* box-shadow: 0px 0px 10px 0px #1a4fc260; */
-    /* display: flex;
-    align-items: center;
-    justify-content: space-evenly; */
 
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(202px, 33%));
-    /* grid-auto-rows: 00px; */
     align-items: center;
     justify-items: center;
 }
@@ -247,7 +245,7 @@ https://codepen.io/Takumari85/pen/RaYwpJ
     /* border: none; */
     display: none;
     /* display needs to be 'none'. it will be toggled to 'grid' upon button press*/
-    display: grid;
+    /* display: grid; */
     /* max-height: 0; */
     overflow: hidden;
     transition: max-height 0.2s ease-out;
@@ -411,14 +409,15 @@ https://www.w3schools.com/howto/howto_js_collapsible.asp
     /* border: 2px #1a4fc2 solid; */
     border-top: none;
     border-radius: 0 0 10px 10px;
-    display: grid;
+    /* set to none display: none, becomes display: grid upon click*/
+    display: none;
     grid-template-rows: 60px 1fr;
     padding: 0 10px;
     background-color: white;
 }
 
 .exer-add {
-    border: 2px grey solid;
+    /* border: 2px grey solid; */
     border-radius: 20px;
     grid-row: 1 / span 1;
     justify-self: center;
@@ -435,7 +434,7 @@ https://www.w3schools.com/howto/howto_js_collapsible.asp
 .exer-div {
     /* border: 1px red solid; */
 
-    border: 2px blue solid;
+    border: 2px rgba(0, 0, 255, 0.5) solid;
 
     border-radius: 20px;
     background-color: white;
@@ -485,6 +484,8 @@ https://www.w3schools.com/howto/howto_js_collapsible.asp
     height: 40px;
     font-size: 16px;
     cursor: pointer;
+
+    /* display: none; becomes display: grid; onclick*/
 }
 
 .exer-name-input,
@@ -508,7 +509,9 @@ https://www.w3schools.com/howto/howto_js_collapsible.asp
 /* ------------ Sets Div ------------- */
 .sets-div {
     grid-column: 1 / span 3;
-    display: grid;
+    /* display: grid; */
+    /* this will collapse */
+    display: none;
     /* grid-template-rows: 60px; */
     grid-auto-rows: 45px;
 }
@@ -526,6 +529,8 @@ https://www.w3schools.com/howto/howto_js_collapsible.asp
 .set-div {
     justify-self: center;
     align-self: center;
+    /* padding-bottom: 3px;
+    border-bottom: 1px grey solid; */
 }
 
 /* .set-div > .set-div {
@@ -572,7 +577,8 @@ https://www.w3schools.com/howto/howto_js_collapsible.asp
 }
 .unit-del,
 .set-unit-add,
-.set-del {
+.set-del,
+.set-copy {
     border-radius: 10px;
     margin: 0 10px;
     height: 25px;
@@ -580,6 +586,9 @@ https://www.w3schools.com/howto/howto_js_collapsible.asp
 }
 
 /* ----- General ----- */
+.toggle-button {
+    background-color: whitesmoke;
+}
 .active,
 .toggle-button:hover {
     background-color: rgba(255, 166, 0, 0.7);
