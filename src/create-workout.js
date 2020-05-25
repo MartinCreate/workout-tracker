@@ -31,7 +31,7 @@ export default function CreateWorkout() {
 
         const newWorkout = document.createElement("div");
         const newWoName = document.createElement("input");
-        const addTagButton = addButton("+ Tag", "wo-tag-add", "wo-tag");
+        const addTagButton = addButton("+ Tag", "tag-add", "tag");
         const tagsNav = document.createElement("div"); // NEW
         const delWorkout = delButton("Remove Workout", "del-wo-button");
 
@@ -97,7 +97,7 @@ export default function CreateWorkout() {
         add.classList.add("add-button");
         add.classList.add(className);
 
-        if (type == "wo-tag") {
+        if (type == "tag") {
             add.innerHTML = "+ Tag";
             add.addEventListener("click", (e) => addWoTag(e));
         } else if (type == "exer-tag") {
@@ -120,10 +120,10 @@ export default function CreateWorkout() {
         const parent = e.target.parentElement;
         const newTagDiv = document.createElement("div");
         const tagInp = document.createElement("input");
-        const delTag = delButton("- Tag", "wo-tag-del");
+        const delTag = delButton("- Tag", "tag-del");
 
-        newTagDiv.classList.add("wo-tag");
-        tagInp.classList.add("wo-tag-input");
+        newTagDiv.classList.add("tag");
+        tagInp.classList.add("tag-input");
         tagInp.type = "text";
         tagInp.setAttribute("placeholder", "Tag Name");
 
@@ -138,8 +138,8 @@ export default function CreateWorkout() {
 
     const collapse = (e) => {
         const coll = e.currentTarget;
-
         coll.classList.toggle("active");
+        console.log("coll: ", coll);
         const content = coll.nextElementSibling;
         console.log("content: ", content);
 
@@ -182,29 +182,29 @@ export default function CreateWorkout() {
                             + Tag
                         </button> */}
                             {/* NEW BELOW */}
-                            <div className="wo-tags-div">
+                            <div className="tags-div">
                                 <button
-                                    className="toggle-tags"
+                                    className="toggle-tags toggle-button"
                                     onClick={(e) => collapse(e)}
                                 >
                                     Tags
                                 </button>
-                                <div className="wo-tags collapse">
+                                <div className="tags collapse">
                                     <button
-                                        className="wo-tag-add"
+                                        className="tag-add"
                                         onClick={(e) => addWoTag(e)}
                                     >
                                         + Tag
                                     </button>
-                                    <div className="wo-tag">
+                                    <div className="tag">
                                         <input
-                                            className="wo-tag-input"
+                                            className="tag-input"
                                             type="text"
                                             placeholder="Tag Name"
                                         />
                                         {/* First tag input field shouldn't have a 'remove' button, otherwise the collapse freaks out*/}
                                         <button
-                                            className="del-button wo-tag-del"
+                                            className="del-button tag-del"
                                             onClick={(e) => deleteElement(e)}
                                         >
                                             - Tag
@@ -214,10 +214,10 @@ export default function CreateWorkout() {
                             </div>
                             {/* NEW ABOVE */}
                             <button
-                                className="del-button wo-remove"
+                                className="del-button wo-del"
                                 onClick={(e) => deleteParent(e)}
                             >
-                                Remove Workout
+                                Delete Workout
                             </button>
                             {/* <div>
                             <input type="text" placeholder="Tag Name" />
@@ -231,7 +231,7 @@ export default function CreateWorkout() {
                         </div>
                         <button
                             onClick={(e) => collapse(e)}
-                            className="toggle-exers"
+                            className="toggle-exercises toggle-button"
                         >
                             Exercises
                         </button>
@@ -239,40 +239,117 @@ export default function CreateWorkout() {
                         <div className="exercises-div collapse">
                             <button className="exer-add">Add Exercise</button>
                             <div className="exer-div">
-                                <input
-                                    className="exer-name-input"
-                                    placeholder="exercise-name"
-                                />
-                                <button>Remove Exercise</button>
+                                <div className="exer-nav">
+                                    <input
+                                        className="exer-name-input"
+                                        placeholder="Exercise Name"
+                                    />
+                                    <div className="tags-div">
+                                        <button
+                                            className="toggle-tags toggle-button"
+                                            onClick={(e) => collapse(e)}
+                                        >
+                                            Tags
+                                        </button>
+                                        <div className="tags collapse">
+                                            <button
+                                                className="tag-add"
+                                                onClick={(e) => addWoTag(e)}
+                                            >
+                                                + Tag
+                                            </button>
+                                            <div className="tag">
+                                                <input
+                                                    className="tag-input"
+                                                    type="text"
+                                                    placeholder="Tag Name"
+                                                />
+                                                {/* First tag input field shouldn't have a 'remove' button, otherwise the collapse freaks out*/}
+                                                <button
+                                                    className="del-button tag-del"
+                                                    onClick={(e) =>
+                                                        deleteElement(e)
+                                                    }
+                                                >
+                                                    - Tag
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button
+                                        className="exer-del"
+                                        onClick={(e) => deleteParent(e)}
+                                    >
+                                        Delete Exercise
+                                    </button>
+                                </div>
                                 <button
-                                    className="toggle-exer"
+                                    className="sets-toggle toggle-button"
                                     onClick={(e) => collapse(e)}
                                 >
-                                    Collapse Exercise
+                                    Sets
                                 </button>
                                 <div className="sets-div collapse">
                                     <button className="set-add">+ Set</button>
                                     <div className="set-div">
                                         <input
-                                            className="rep-inp"
+                                            className="reps-inp"
                                             placeholder="reps"
                                         />
-                                        <button className="set-del">
-                                            - Set
-                                        </button>
+                                        <p className="reps-label">r</p>
+                                        <div className="units-div">
+                                            <div className="unit-div">
+                                                <input
+                                                    className="unit-val-inp"
+                                                    placeholder="value"
+                                                />
+                                                <input
+                                                    className="unit-measure-inp"
+                                                    type="text"
+                                                    list="units"
+                                                    placeholder="units"
+                                                />
+                                                <datalist
+                                                    id="units" //gonna have to make this value custom
+                                                    name="units"
+                                                >
+                                                    <option value="kg"></option>
+                                                    <option value="lb">
+                                                        Pounds
+                                                    </option>
+                                                    <option value="sec">
+                                                        Seconds
+                                                    </option>
+                                                    <option value="sec/rep">
+                                                        Seconds / Rep
+                                                    </option>
+                                                    <option value="mins">
+                                                        Minutes
+                                                    </option>
+                                                </datalist>
+                                                {/* <input
+                                                className="unit-measure-inp"
+                                                placeholder="units"
+                                            /> */}
+                                                <button
+                                                    className="unit-del"
+                                                    onClick={(e) =>
+                                                        deleteElement(e)
+                                                    }
+                                                >
+                                                    - Unit
+                                                </button>
+                                            </div>
+                                        </div>
                                         <button className="set-unit-add">
                                             + Unit
                                         </button>
-                                        <div>
-                                            <input
-                                                className="unit-val-inp"
-                                                placeholder="value"
-                                            ></input>
-                                            <input
-                                                className="unit-measure-input"
-                                                placeholder="units e.g. KG"
-                                            ></input>
-                                        </div>
+                                        <button
+                                            className="set-del"
+                                            onClick={(e) => deleteElement(e)}
+                                        >
+                                            - Set
+                                        </button>
                                     </div>
                                 </div>
                             </div>
