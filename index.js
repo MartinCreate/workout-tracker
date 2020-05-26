@@ -162,7 +162,6 @@ app.post("/login", async (req, res) => {
     try {
         const { rows } = await db.login(req.body.email);
         const matchValue = await compare(req.body.password, rows[0].password);
-        // console.log("matchValue: ", matchValue);
 
         if (req.body.password == "") {
             throw Error;
@@ -237,6 +236,74 @@ app.post("/reset-pword/two", async (req, res) => {
     }
 });
 
+////------------------------------- /submit-exercise ---------------------------------------------- //
+app.post("/submit-exercise", async (req, res) => {
+    console.log("We're in /submit-exercise!");
+    const bod = req.body;
+    const myId = req.session.userId;
+    console.log("req.body in /submit-exercise: ", req.body);
+
+    try {
+        let exerId;
+
+        const check = await db.checkExercise(myId, bod.exName);
+
+        if (check.rows[0]) {
+            exerId = check.rows[0].exer_id;
+            await db.deleteExerTags(myId, exerId);
+            await db.deleteExerSets(myId, exerId);
+        } else {
+            const { rows } = await db.insertExercise(myId, bod.exName);
+            exerId = rows[0].id;
+        }
+
+        for (const tag of bod.exTags) {
+            await db.insertExerTag(myId, exerId, tag);
+        }
+
+        for (const set of bod.sets) {
+            let setNr = bod.sets.indexOf(set) + 1;
+            let reps = set[0];
+
+            let units;
+            let val1;
+            let meas1;
+            let val2;
+            let meas2;
+
+            if (set[1]) {
+                units = set[1];
+                val1 = units[0][0];
+                meas1 = units[0][1];
+
+                if (units[1]) {
+                    val2 = units[1][0];
+                    meas2 = units[1][1];
+                }
+            }
+
+            await db.insertSet(
+                myId,
+                exerId,
+                setNr,
+                reps,
+                val1,
+                meas1,
+                val2,
+                meas2
+            );
+        }
+    } catch (e) {
+        console.log("ERROR in /submit-exercise: ", e);
+    }
+});
+
+////------------------------------- /save-workout ---------------------------------------------- //
+app.post("/save-workout", async (req, res) => {
+    console.log("We're in /save-workout");
+    console.log("req.body inside /save-workout: ", req.body);
+});
+
 // ////------------------------------- /upload-image route ---------------------------------------------- //
 // //uploader.single('propertyKey from formData') runs the multer code from the boilerplate above
 // app.post("/upload-profile", uploader.single("file"), s3.upload, (req, res) => {
@@ -283,5 +350,5 @@ app.get("*", function (req, res) {
 ////-------------------------------  Port ---------------------------------------------- //
 
 app.listen(8080, function () {
-    console.log("socialnetwork server listening...");
+    console.log("trackerX server listening...");
 });

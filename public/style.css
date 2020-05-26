@@ -51,6 +51,7 @@ main,
 .component-container {
     /* border: 1px blue solid; */
     height: 100%;
+    width: 100%;
 }
 .component {
     /* border: 1px red solid; */
@@ -190,17 +191,12 @@ https://codepen.io/Takumari85/pen/RaYwpJ
 
 /* -------------------------- home screen ------------------------------------------------------- */
 
-.component-container {
-    height: 100%;
-    width: 100%;
-}
-
 #home-menu-container {
-    /* border: 2px #1a4fc2 solid; */
+    border: 2px #1a4fc2 solid;
     border-radius: 30px;
     padding: 100px 20px;
     min-width: 244px;
-    width: 80%;
+    width: 100%;
 
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(202px, 33%));
@@ -238,7 +234,7 @@ https://codepen.io/Takumari85/pen/RaYwpJ
 
 /* -------------------------- Create-Workout ------------------------------------------------------- */
 #wo-creator-component {
-    width: 90%;
+    width: 100%;
 }
 
 .collapse {
@@ -263,7 +259,8 @@ https://codepen.io/Takumari85/pen/RaYwpJ
 }
 #wo-creator {
     /* border: 1px green solid; */
-    width: 100%;
+    width: 60%;
+    min-width: 600px;
     box-sizing: border-box;
     margin: 30px 0;
     padding: 10px;
@@ -273,11 +270,11 @@ https://codepen.io/Takumari85/pen/RaYwpJ
     /* border: 1px red solid; */
     border-radius: 20px;
     background-color: rgba(0, 255, 255, 0.233);
-    background-color: whitesmoke;
+    background-color: white;
     box-shadow: 0px 0px 10px 5px #1a4fc260;
-
     overflow: hidden;
     margin-bottom: 50px;
+    /* padding-bottom: 50px; */
 }
 /* :root {
     --speed: 500ms;
@@ -287,7 +284,8 @@ https://codepen.io/Takumari85/pen/RaYwpJ
 .workout-nav {
     /* border: 1px blue solid; */
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    /* grid-template-columns: repeat(3, 1fr); */
+    grid-template-columns: 34% 32% 34%;
 }
 
 .new-workout {
@@ -298,7 +296,6 @@ https://codepen.io/Takumari85/pen/RaYwpJ
 }
 .wo-name {
     border: none;
-    border-right: 1px #1a4fc288 solid;
     border-top-left-radius: 20px;
     font-weight: bold;
     color: black;
@@ -307,6 +304,9 @@ https://codepen.io/Takumari85/pen/RaYwpJ
 }
 .wo-name:focus {
     outline: none;
+}
+.wo-name::placeholder {
+    color: rgb(169, 168, 168);
 }
 
 /* TRYING OUT COLLAPSIBLES */
@@ -322,9 +322,12 @@ https://www.w3schools.com/howto/howto_js_collapsible.asp
 
     width: 100%;
     cursor: pointer;
+    color: rgba(0, 0, 0, 0.6);
+    font-weight: bold;
 }
 .tags {
     /*display becomes 'grid', but for collapse we start it at 'none' */
+    /* For editing do display: grid; */
     /* display: grid; */
     display: none;
     grid-template-rows: 30px auto;
@@ -334,9 +337,6 @@ https://www.w3schools.com/howto/howto_js_collapsible.asp
 .tag-add {
     border: 1px grey solid;
     border-top: none;
-    /* border-left: 1px grey solid; */
-
-    cursor: pointer;
 }
 
 .tag {
@@ -356,7 +356,6 @@ https://www.w3schools.com/howto/howto_js_collapsible.asp
     border: none;
     border-right: 1px grey solid;
     border-bottom: 1px grey solid;
-    cursor: pointer;
 }
 
 /* .tags input:first-child {
@@ -370,35 +369,55 @@ https://www.w3schools.com/howto/howto_js_collapsible.asp
 }
 .wo-del {
     border: none;
-    /* border-top: 2px grey solid;
-    border-right: 2px grey solid; */
-    border-left: 1px #1a4fc288 solid;
     border-top-right-radius: 17.8px;
     font-weight: bold;
-    color: rgba(0, 0, 0, 0.562);
+    color: rgba(0, 0, 0, 0.6);
     cursor: pointer;
 }
 .toggle-tags,
 .wo-name,
 .wo-del {
     outline: none;
-    font-size: 18px;
+    font-size: 20px;
     height: 50px;
     background-color: white;
-    border-bottom: 1px #1a4fc2 solid;
+    /* border-bottom: 1px #1a4fc2 solid; */
+    /* border-bottom: 1px lightgrey solid; */
+    box-shadow: inset 0px 13px 25px -27px rgba(0, 0, 0, 0.75);
+}
+
+.submit-wo {
+    border: none;
+    box-shadow: inset 0px -13px 25px -27px rgba(0, 0, 0, 0.75);
+    width: 100%;
+    height: 50px;
+    background-color: white;
+    color: grey;
+    font-weight: bold;
+    font-size: 18px;
+}
+.submit-wo:hover {
+    color: white;
+    background-color: #1a4fc29f;
+}
+.submit-wo:focus {
+    color: white;
+    background-color: #1a4fc2d7;
 }
 
 /* --------------------- Exercise ------------------------------ */
 .toggle-exercises {
     /* border: 2px#1a4fc2 solid; */
     border: none;
-    /* border-bottom: 1px#1a4fc2 solid; */
     background-color: whitesmoke;
     outline: none;
     width: 100%;
     height: 40px;
-    font-size: 16px;
+    font-size: 18px;
+    font-weight: bold;
     cursor: pointer;
+    color: rgba(0, 0, 0, 0.6);
+    box-shadow: inset 0px -10px 25px -27px rgba(0, 0, 0, 0.75);
 }
 
 .toggle-exercises:hover {
@@ -410,9 +429,11 @@ https://www.w3schools.com/howto/howto_js_collapsible.asp
     border-top: none;
     border-radius: 0 0 10px 10px;
     /* set to none display: none, becomes display: grid upon click*/
+    /* For editing do display: grid; */
     display: none;
+    display: grid;
+
     grid-template-rows: 60px 1fr;
-    padding: 0 10px;
     background-color: white;
 }
 
@@ -433,15 +454,13 @@ https://www.w3schools.com/howto/howto_js_collapsible.asp
 
 .exer-div {
     /* border: 1px red solid; */
-
-    border: 2px rgba(0, 0, 255, 0.5) solid;
-
     border-radius: 20px;
     background-color: white;
     /* box-shadow: 0px 0px 1px 1px #1a4fc260; */
-
     overflow: hidden;
     margin-bottom: 40px;
+    width: 90%;
+    justify-self: center;
 }
 
 .exer-nav {
@@ -453,6 +472,7 @@ https://www.w3schools.com/howto/howto_js_collapsible.asp
 
     display: grid;
     grid-template-columns: repeat(3, 1fr);
+    /* grid-template-columns: 40% 30% 30%; */
 
     overflow: hidden;
 }
@@ -460,19 +480,20 @@ https://www.w3schools.com/howto/howto_js_collapsible.asp
 .exer-name-input {
     border: none;
     border-top-left-radius: 10px;
-    border-right: 1px #1a4fc2c0 solid;
     outline: none;
     font-weight: bold;
     width: 100%;
-    padding: 0 10px;
+    padding: 0 20px;
+}
+.exer-name-input::placeholder {
+    color: rgb(169, 168, 168);
 }
 
 .exer-del {
     border: none;
-    border-left: 1px #1a4fc288 solid;
     border-top-right-radius: 17.8px;
     background-color: white;
-    color: rgba(0, 0, 0, 0.5);
+    color: rgba(0, 0, 0, 0.6);
     font-weight: bold;
 }
 
@@ -483,18 +504,18 @@ https://www.w3schools.com/howto/howto_js_collapsible.asp
     width: 100%;
     height: 40px;
     font-size: 16px;
-    cursor: pointer;
+    font-weight: bold;
+    color: rgba(0, 0, 0, 0.6);
+    box-shadow: inset 0px -15px 25px -27px rgba(0, 0, 0, 0.75);
 
-    /* display: none; becomes display: grid; onclick*/
+    cursor: pointer;
 }
 
 .exer-name-input,
 .exer-del {
-    /* border-bottom: 2px #1a4fc2c0 solid; */
-    border-bottom: 1px grey solid;
-    font-size: 16px;
+    font-size: 20px;
     height: 50px;
-    border-bottom: 1px #1a4fc2 solid;
+    box-shadow: inset 0px 13px 25px -27px rgba(0, 0, 0, 0.75);
 }
 
 .exer-del:hover,
@@ -509,9 +530,10 @@ https://www.w3schools.com/howto/howto_js_collapsible.asp
 /* ------------ Sets Div ------------- */
 .sets-div {
     grid-column: 1 / span 3;
-    /* display: grid; */
-    /* this will collapse */
-    display: none;
+
+    /* for editing make this display:grid */
+    /* display: none; */
+    display: grid;
     /* grid-template-rows: 60px; */
     grid-auto-rows: 45px;
 }
@@ -585,6 +607,25 @@ https://www.w3schools.com/howto/howto_js_collapsible.asp
     width: 50px;
 }
 
+.submit-exer {
+    width: 100%;
+    border: none;
+    background-color: white;
+    color: grey;
+    font-weight: bold;
+    font-size: 16px;
+    box-shadow: inset 0px -20px 25px -27px rgba(0, 0, 0, 0.75);
+}
+
+.submit-exer:hover {
+    color: white;
+    background-color: #1a4fc27c;
+}
+.submit-exer:focus {
+    color: white;
+    background-color: #1a4fc2d7;
+}
+
 /* ----- General ----- */
 .toggle-button {
     background-color: whitesmoke;
@@ -592,6 +633,29 @@ https://www.w3schools.com/howto/howto_js_collapsible.asp
 .active,
 .toggle-button:hover {
     background-color: rgba(255, 166, 0, 0.7);
+    box-shadow: none;
+    /* background-color: #487be9; */
+    /* color: white; */
+}
+
+.toggle-tags,
+.wo-name,
+.wo-del,
+.exer-name-input,
+.exer-del {
+    border-bottom: 1px lightgrey solid;
+}
+.wo-name,
+.exer-name-input {
+    border-right: 1px lightgrey solid;
+}
+.wo-del,
+.exer-del {
+    border-left: 1px lightgrey solid;
+}
+.submit-wo,
+.submit-exer {
+    border-top: 1px lightgrey solid;
 }
 /* ----------------------------------------------- Phone Styling ---------------------------------------------------------- */
 @media screen and (min-width: 100px) and (max-width: 920px) {

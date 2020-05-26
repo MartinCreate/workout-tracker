@@ -26,6 +26,178 @@ export default function CreateWorkout() {
     //     }
     // };
 
+    //// ---------------------------- Functions used in dynamicalle generatedHTML ---------------------------------------- //
+
+    const delButton = (buttonLabel, className, type, name, id) => {
+        const delButton = document.createElement("button");
+        delButton.innerHTML = buttonLabel;
+        if (type == "workout") {
+            delButton.addEventListener("click", (e) => deleteParent(e));
+        } else {
+            delButton.addEventListener("click", (e) => deleteElement(e));
+        }
+        delButton.classList.add("del-button");
+        delButton.classList.add(className);
+        delButton.setAttribute("name", name);
+        // delButton.id = id;
+
+        return delButton;
+    };
+
+    const deleteUnit = (e) => {
+        console.log("e.target: ", e.target);
+        const parent = e.target.parentElement;
+        const gParent = parent.parentNode;
+        const ggParent = gParent.parentNode;
+
+        const deleteEl = e.target.parentElement;
+        // console.log("deleteEl: ", deleteEl);
+        deleteEl.parentNode.removeChild(deleteEl);
+
+        if (ggParent.getElementsByClassName("unit-div").length < 2) {
+            const addUnit = ggParent.getElementsByClassName("set-unit-add")[0];
+            console.log("addUnit: ", addUnit);
+            // addUnit.style.visibility = "visible";
+            addUnit.style.display = "inline-block";
+        }
+        console.log("ggParent: ", ggParent);
+    };
+    const deleteElement = (e) => {
+        console.log("e.target: ", e.target);
+        const deleteEl = e.target.parentElement;
+        console.log("deleteEl: ", deleteEl);
+        deleteEl.parentNode.removeChild(deleteEl);
+    };
+    const deleteParent = (e) => {
+        const deleteEl = e.target.parentElement;
+        const workout = deleteEl.parentNode;
+        workout.parentNode.removeChild(workout);
+    };
+
+    const collapse = (e) => {
+        const coll = e.currentTarget;
+        coll.classList.toggle("active");
+        console.log("coll: ", coll);
+        const content = coll.nextElementSibling;
+        console.log("content: ", content);
+
+        //collapse without animation
+        if (content.style.display === "grid") {
+            content.style.display = "none";
+        } else {
+            content.style.display = "grid";
+        }
+
+        //collapse with animation
+        // if (content.style.maxHeight) {
+        //     content.style.maxHeight = null;
+        // } else {
+        //     content.style.maxHeight = content.scrollHeight + "px";
+        // }
+    };
+
+    const submitExercise = async (e) => {
+        console.log("--- In submitExercise(e) ---");
+        const parent = e.target.parentElement;
+        const gP = parent.parentNode;
+        const gggP = gP.parentNode.parentNode;
+        // console.log("e.target: ", e.target);
+        // console.log("parent: ", parent);
+        // console.log("gParent: ", gP);
+        // console.log("gggP: ", gggP);
+
+        let exerData = {};
+        // example of how exerData is structured
+        // exerData = {
+        //     woName: "Chest Day"
+        //     exName: "Pushups",
+        //     exTags: ["bodyweight", "chest"],
+        //     sets: [
+        //         [ 10, [ [12, "kg"], [10, "sec"] ] ],
+        //         [ 10 ],
+        //         [ 10, [ [18, "kg"] ] ],
+        //     ],
+        // };
+        //Where sets[i][0] is the number of reps
+
+        //----- Workout & Exercise Name
+        const workoutName = gggP.getElementsByClassName("wo-name")[0].value;
+        const exerName = gP.getElementsByClassName("exer-name-input")[0].value;
+        //error message if !workoutName
+        //error message if !exerName
+        exerData.woName = workoutName;
+        exerData.exName = exerName;
+
+        //----- Tag data
+        const tags = gP.getElementsByClassName("tag-input");
+        if (tags.length != 0) {
+            //1) delete tag-divs w/ empty inputs
+            for (let i = tags.length - 1; i > -1; i--) {
+                if (!tags[i].value) {
+                    const tagPar = tags[i].parentNode;
+                    tagPar.parentNode.removeChild(tagPar);
+                }
+            }
+
+            //2) get data from tags
+            if (tags.length != 0) {
+                let tagsArr = [];
+                for (let i = 0; i < tags.length; i++) {
+                    tagsArr.push(tags[i].value);
+                }
+                exerData.exTags = tagsArr;
+            }
+        }
+
+        //----- Sets data
+        const setDivs = gP.getElementsByClassName("set-div");
+
+        if (setDivs.length != 0) {
+            let setsData = [];
+
+            for (let s = 0; s < setDivs.length; s++) {
+                let setData = [];
+                const reps = setDivs[s].getElementsByClassName("reps-inp")[0]
+                    .value;
+                //error message if reps is not a number
+
+                setData.push(reps);
+
+                const val = setDivs[s].getElementsByClassName("unit-val-inp");
+                const m = setDivs[s].getElementsByClassName("unit-measure-inp");
+                //error message if val is not a number
+                //error message if val.length != m.length
+
+                if (val.length != 0) {
+                    let units = [];
+
+                    for (let i = 0; i < val.length; i++) {
+                        let unit = [];
+                        const unitVal = val[i].value;
+                        const unitMeas = m[i].value;
+
+                        unit.push(unitVal);
+                        unit.push(unitMeas);
+
+                        units.push(unit);
+                    }
+                    setData.push(units);
+                }
+                setsData.push(setData);
+            }
+            exerData.sets = setsData;
+        }
+
+        //do axios post here
+        console.log("exerData: ", exerData);
+        try {
+            const resp = await axios.post("/submit-exercise", exerData);
+        } catch (e) {
+            console.log("ERROR in POST /submit-exercise: ", e);
+        }
+    };
+
+    //// ---------------------------------------------- Dynamically Generating the HTML ---------------------------------------- //
     const addWorkout = () => {
         const woContainer = document.getElementById("wo-creator");
         const newWorkout = document.createElement("div");
@@ -44,12 +216,7 @@ export default function CreateWorkout() {
 
         const delWorkout = delButton("Delete Workout", "wo-del", "workout");
 
-        // tags.appendChild(addTagButton);
-        // tagsDiv.appendChild(toggleTag);
-        // tagsDiv.appendChild(tags);
-
         woNav.appendChild(woName);
-
         woNav.appendChild(tagsDiv);
         woNav.appendChild(delWorkout);
 
@@ -72,7 +239,13 @@ export default function CreateWorkout() {
         exerAdd.addEventListener("click", (e) => addExercise(e));
         exerAdd.innerHTML = "+ Exercise";
 
+        const submitWo = document.createElement("button");
+        submitWo.classList.add("submit-wo");
+        submitWo.addEventListener("click", (e) => addExercise(e)); //CHANGE THIS to submitWorkout()
+        submitWo.innerHTML = "Save Workout";
+
         exersDiv.appendChild(exerAdd);
+        exersDiv.appendChild(submitWo);
 
         newWorkout.appendChild(exersDiv);
 
@@ -94,14 +267,16 @@ export default function CreateWorkout() {
         const tagsDiv = document.createElement("div");
         tagsDiv.classList.add("tags-div");
 
-        //--toggleTags
         const toggleTag = document.createElement("button");
         toggleTag.classList.add("toggle-tags");
         toggleTag.classList.add("toggle-button");
         toggleTag.addEventListener("click", (e) => collapse(e));
         toggleTag.innerHTML = "Tags";
 
-        const addTagButton = addButton("+ Tag", "tag-add", "tag");
+        const addTagButton = document.createElement("button");
+        addTagButton.classList.add("tag-add");
+        addTagButton.innerHTML = "+ Tag";
+        addTagButton.addEventListener("click", (e) => addWoTag(e));
 
         const tags = document.createElement("div");
         tags.classList.add("tags");
@@ -112,57 +287,6 @@ export default function CreateWorkout() {
         tagsDiv.appendChild(tags);
 
         return tagsDiv;
-    };
-
-    const delButton = (buttonLabel, className, type, name, id) => {
-        const delButton = document.createElement("button");
-        delButton.innerHTML = buttonLabel;
-        if (type == "workout") {
-            delButton.addEventListener("click", (e) => deleteParent(e));
-        } else {
-            delButton.addEventListener("click", (e) => deleteElement(e));
-        }
-        delButton.classList.add("del-button");
-        delButton.classList.add(className);
-        delButton.setAttribute("name", name);
-        // delButton.id = id;
-
-        return delButton;
-    };
-
-    const deleteElement = (e) => {
-        console.log("e.target: ", e.target);
-        const deleteEl = e.target.parentElement;
-        console.log("deleteEl: ", deleteEl);
-        deleteEl.parentNode.removeChild(deleteEl);
-    };
-    const deleteParent = (e) => {
-        const deleteEl = e.target.parentElement;
-        const workout = deleteEl.parentNode;
-        workout.parentNode.removeChild(workout);
-    };
-
-    const addButton = (buttonLabel, className, type, name, id) => {
-        const add = document.createElement("button");
-        add.innerHTML = buttonLabel;
-        // add.classList.add("add-button");
-        add.classList.add(className);
-
-        if (type == "tag") {
-            add.innerHTML = "+ Tag";
-            add.addEventListener("click", (e) => addWoTag(e));
-        } else if (type == "exer-tag") {
-            add.innerHTML = "+ Tag";
-            add.addEventListener("click", (e) => addExerTag(e));
-        } else if (type == "exercise") {
-            add.addEventListener("click", (e) => addExer(e));
-        } else if (type == "set") {
-            add.addEventListener("click", (e) => addSet(e));
-        } else if (type == "unit") {
-            add.addEventListener("click", (e) => addUnit(e));
-        }
-
-        return add;
     };
 
     const addWoTag = (e) => {
@@ -185,6 +309,8 @@ export default function CreateWorkout() {
 
     const addExercise = (e) => {
         const parent = e.target.parentElement;
+        console.log("parent addExercise(e): ", parent);
+
         const exerDiv = document.createElement("div");
         exerDiv.classList.add("exer-div");
 
@@ -217,7 +343,13 @@ export default function CreateWorkout() {
         setAdd.addEventListener("click", (e) => addSet(e));
         setAdd.innerHTML = "+ Set";
 
+        const submitExer = document.createElement("button");
+        submitExer.classList.add("submit-exer");
+        submitExer.addEventListener("click", (e) => submitExercise(e)); //CHANGE THIS to submitExercise()
+        submitExer.innerHTML = " Save Exercise";
+
         setsDiv.appendChild(setAdd);
+        setsDiv.appendChild(submitExer);
 
         exerNav.appendChild(exerInp);
         exerNav.appendChild(tagsDiv);
@@ -228,11 +360,13 @@ export default function CreateWorkout() {
         exerDiv.appendChild(setsDiv);
 
         parent.appendChild(exerDiv);
+        const submitWo = parent.getElementsByClassName("submit-wo")[0];
+        parent.insertBefore(exerDiv, submitWo);
     };
 
     const addSet = (e) => {
         const parent = e.target.parentElement;
-        console.log("parent: ", parent);
+        console.log("parent addSet(e): ", parent);
         const setDiv = document.createElement("div");
         setDiv.classList.add("set-div");
 
@@ -265,11 +399,13 @@ export default function CreateWorkout() {
         setDiv.appendChild(repsInp);
         setDiv.appendChild(pr);
         setDiv.appendChild(unitsDiv);
+
         setDiv.appendChild(addUnits);
         setDiv.appendChild(copySet);
         setDiv.appendChild(delSet);
 
-        parent.appendChild(setDiv);
+        const submitExer = parent.getElementsByClassName("submit-exer")[0];
+        parent.insertBefore(setDiv, submitExer);
     };
 
     const duplicateSet = (e) => {
@@ -289,18 +425,17 @@ export default function CreateWorkout() {
         delSetClone.addEventListener("click", (e) => deleteElement(e));
         if (delUnitClone) {
             for (let i = 0; i < delUnitClone.length; i++) {
-                delUnitClone[i].addEventListener("click", (e) =>
-                    deleteElement(e)
-                );
+                delUnitClone[i].addEventListener("click", (e) => deleteUnit(e));
             }
         }
 
-        // grandparent.appendChild(clone);
         grandparent.insertBefore(clone, parent.nextSibling);
     };
 
     const addUnit = (e) => {
         const prevSib = e.target.previousSibling;
+        const parent = e.target.parentElement;
+        console.log("parent addUnit(): ", parent);
         const unitDiv = document.createElement("div");
 
         const valInp = document.createElement("input");
@@ -341,7 +476,7 @@ export default function CreateWorkout() {
 
         const unitDel = document.createElement("button");
         unitDel.classList.add("unit-del");
-        unitDel.addEventListener("click", (e) => deleteElement(e));
+        unitDel.addEventListener("click", (e) => deleteUnit(e));
         unitDel.innerHTML = "- Unit";
 
         unitDiv.appendChild(valInp);
@@ -352,28 +487,12 @@ export default function CreateWorkout() {
         unitDiv.classList.add("unit-div");
 
         prevSib.appendChild(unitDiv);
-    };
 
-    const collapse = (e) => {
-        const coll = e.currentTarget;
-        coll.classList.toggle("active");
-        console.log("coll: ", coll);
-        const content = coll.nextElementSibling;
-        console.log("content: ", content);
-
-        //collapse without animation
-        if (content.style.display === "grid") {
-            content.style.display = "none";
-        } else {
-            content.style.display = "grid";
+        if (parent.getElementsByClassName("unit-div").length == 2) {
+            const addUnit = parent.getElementsByClassName("set-unit-add")[0];
+            // addUnit.style.visibility = "hidden";
+            addUnit.style.display = "none";
         }
-
-        //collapse with animation
-        // if (content.style.maxHeight) {
-        //     content.style.maxHeight = null;
-        // } else {
-        //     content.style.maxHeight = content.scrollHeight + "px";
-        // }
     };
 
     return (
@@ -536,7 +655,7 @@ export default function CreateWorkout() {
                                                 <button
                                                     className="unit-del"
                                                     onClick={(e) =>
-                                                        deleteElement(e)
+                                                        deleteUnit(e)
                                                     }
                                                 >
                                                     - Unit
@@ -562,8 +681,20 @@ export default function CreateWorkout() {
                                             - Set
                                         </button>
                                     </div>
+                                    <button
+                                        className="submit-exer"
+                                        onClick={(e) => submitExercise(e)}
+                                    >
+                                        Save Exercise
+                                    </button>
                                 </div>
                             </div>
+                            <button
+                                className="submit-wo"
+                                onClick={(e) => addExercise(e)}
+                            >
+                                Save Workout
+                            </button>
                         </div>
                     </div>
                 </div>

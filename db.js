@@ -62,7 +62,153 @@ module.exports.updatePassword = (email, password) => {
         [email, password]
     );
 };
+// ////// --------------------------------/submit-workout ------------------------------------------------//
+////--UPSERT
+module.exports.upsertWorkout = (id, wo_name) => {
+    return db.query(
+        `
+        INSERT INTO workouts (user_id, workout_name)
+        VALUES ($1, $2)
+        ON CONFLICT (workout_name) DO NOTHING`,
+        [id, wo_name]
+    );
+};
+module.exports.upsExerByWo = (id, wo_id, exer_id) => {
+    return db.query(
+        `
+        INSERT INTO exercises (user_id, exercise_name)
+        VALUES ($1, $2)
+        ON CONFLICT (exercise_name) DO NOTHING`,
+        [id, exercise]
+    );
+};
 
+// ////// --------------------------------/submit-exercise ------------------------------------------------//
+module.exports.checkExercise = (userId, exerName) => {
+    return db.query(
+        `
+        SELECT id AS exer_id
+        FROM exercises
+        WHERE user_id = $1 AND exercise_name = $2`,
+        [userId, exerName]
+    );
+};
+module.exports.insertExercise = (userId, exerName) => {
+    return db.query(
+        `
+        INSERT INTO exercises (user_id, exercise_name)
+        VALUES ($1, $2)
+        RETURNING id`,
+        [userId, exerName]
+    );
+};
+// ////--UPSERT
+// module.exports.upsertExercise = (userId, exercise) => {
+//     return db.query(
+//         `
+//         INSERT INTO exercises (user_id, exercise_name)
+//         VALUES ($1, $2)
+//         ON CONFLICT (exercise_name) DO NOTHING
+//         RETURNING id`,
+//         [userId, exercise]
+//     );
+// };
+module.exports.deleteExerTags = (userId, exerId) => {
+    return db.query(
+        `
+        DELETE FROM exercise_tags
+        WHERE user_id = $1 AND exercise_id = $2`,
+        [userId, exerId]
+    );
+};
+module.exports.insertExerTag = (userId, exerId, exerTag) => {
+    return db.query(
+        `
+        INSERT INTO exercise_tags (user_id, exercise_id, exer_tags)
+        VALUES ($1, $2, $3)`,
+        [userId, exerId, exerTag]
+    );
+};
+
+module.exports.deleteExerSets = (userId, exerId) => {
+    return db.query(
+        `
+        DELETE FROM sets_table
+        WHERE user_id = $1 AND exercise_id = $2`,
+        [userId, exerId]
+    );
+};
+module.exports.insertSet = (
+    userId,
+    exerId,
+    setNum,
+    reps,
+    val1 = null,
+    units1 = null,
+    val2 = null,
+    units2 = null
+) => {
+    return db.query(
+        `
+        INSERT INTO sets_table
+        (user_id, exercise_id, set_number, reps, val1, units1, val2, units2)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+        [
+            userId,
+            exerId,
+            setNum,
+            reps,
+            val1 || null,
+            units1 || null,
+            val2 || null,
+            units2 || null,
+        ]
+    );
+};
+
+// module.exports.upsertSets = (
+//     userId,
+//     exerId,
+//     setNum,
+//     reps,
+//     val1,
+//     units1,
+//     val2,
+//     units2
+// ) => {
+//     return db.query(
+//         `
+//         INSERT INTO sets_table
+//         (user_id, exercise_id, set_number, reps, val1, units1, val2, units2)
+//         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+//         ON CONFLICT (set_number) DO UPDATE
+//         SET set_number = $3, reps = $4, val1 = $5, units1 = $6, val2 = $7, units2 = 8$`,
+//         [userId, exerId, setNum, reps, val1, units1, val2, units2]
+//     );
+// };
+
+// module.exports.setDefaultExTags = (id, ex_name) => {
+//     return db.query(
+//         `
+//         INSERT INTO default_workouts (user_id, workout, exercises)
+//         VALUES ($1, $2, $3)
+//         ON CONFLICT (exercises) DO NOTHING`,
+//         [id, wo_name, ex_name]
+//     );
+// };
+
+// ////--UPSERT
+// module.exports.setDefaultWorkouts = (id, wo_name, ex_name) => {
+//     return db.query(
+//         `
+//         INSERT INTO default_workouts (user_id, workout, exercises)
+//         VALUES ($1, $2, $3)
+//         ON CONFLICT (exercises) DO UPDATE SET exercises = $1`,
+//         [user_id, age || null, city, checkUrl(url)]
+//     );
+// };
+
+// ////// --------------------------FROM SOCIAL NETWORK BELOW ------------------------------------------------//
 // ////// --------------------------------/user ------------------------------------------------//
 // module.exports.getUserInfo = (id) => {
 //     return db.query(
