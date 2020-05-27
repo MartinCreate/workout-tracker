@@ -113,25 +113,6 @@ module.exports.insertExersByWrkt = (userId, wrktId, exerId) => {
         [userId, wrktId, exerId]
     );
 };
-// ////--UPSERT
-// module.exports.upsertWorkout = (id, wo_name) => {
-//     return db.query(
-//         `
-//         INSERT INTO workouts (user_id, workout_name)
-//         VALUES ($1, $2)
-//         ON CONFLICT (workout_name) DO NOTHING`,
-//         [id, wo_name]
-//     );
-// };
-// module.exports.upsExerByWo = (id, wo_id, exer_id) => {
-//     return db.query(
-//         `
-//         INSERT INTO exercises (user_id, exercise_name)
-//         VALUES ($1, $2)
-//         ON CONFLICT (exercise_name) DO NOTHING`,
-//         [id, exercise]
-//     );
-// };
 
 // ////// --------------------------------/submit-exercise ------------------------------------------------//
 module.exports.checkExercise = (userId, exerName) => {
@@ -152,17 +133,6 @@ module.exports.insertExercise = (userId, exerName) => {
         [userId, exerName]
     );
 };
-// ////--UPSERT
-// module.exports.upsertExercise = (userId, exercise) => {
-//     return db.query(
-//         `
-//         INSERT INTO exercises (user_id, exercise_name)
-//         VALUES ($1, $2)
-//         ON CONFLICT (exercise_name) DO NOTHING
-//         RETURNING id`,
-//         [userId, exercise]
-//     );
-// };
 module.exports.deleteExerTags = (userId, exerId) => {
     return db.query(
         `
@@ -215,48 +185,6 @@ module.exports.insertSet = (
         ]
     );
 };
-
-// module.exports.upsertSets = (
-//     userId,
-//     exerId,
-//     setNum,
-//     reps,
-//     val1,
-//     units1,
-//     val2,
-//     units2
-// ) => {
-//     return db.query(
-//         `
-//         INSERT INTO sets_table
-//         (user_id, exercise_id, set_number, reps, val1, units1, val2, units2)
-//         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
-//         ON CONFLICT (set_number) DO UPDATE
-//         SET set_number = $3, reps = $4, val1 = $5, units1 = $6, val2 = $7, units2 = 8$`,
-//         [userId, exerId, setNum, reps, val1, units1, val2, units2]
-//     );
-// };
-
-// module.exports.setDefaultExTags = (id, ex_name) => {
-//     return db.query(
-//         `
-//         INSERT INTO default_workouts (user_id, workout, exercises)
-//         VALUES ($1, $2, $3)
-//         ON CONFLICT (exercises) DO NOTHING`,
-//         [id, wo_name, ex_name]
-//     );
-// };
-
-// ////--UPSERT
-// module.exports.setDefaultWorkouts = (id, wo_name, ex_name) => {
-//     return db.query(
-//         `
-//         INSERT INTO default_workouts (user_id, workout, exercises)
-//         VALUES ($1, $2, $3)
-//         ON CONFLICT (exercises) DO UPDATE SET exercises = $1`,
-//         [user_id, age || null, city, checkUrl(url)]
-//     );
-// };
 
 // ////// --------------------------------/track-workout ------------------------------------------------//
 //// --------------/choose-workout -----------------//
@@ -313,6 +241,135 @@ module.exports.getExerTags = (userId, exerId) => {
         WHERE user_id = $1 AND exercise_id = $2
         ORDER BY exer_tags ASC`,
         [userId, exerId]
+    );
+};
+
+// ////// --------------------------------POST /track-workout ------------------------------------------------//
+module.exports.insertWorkoutSession = (userId, woName, woId) => {
+    return db.query(
+        `
+        INSERT INTO workout_session (user_id, workout_name, workout_id)
+        VALUES ($1, $2, $3)
+        RETURNING id`,
+        [userId, woName, woId]
+    );
+};
+
+module.exports.trackInsertExercise = (userId, seshId, exerName, exerId) => {
+    return db.query(
+        `
+        INSERT INTO track_exercises (user_id, wo_session_id, exercise_name, exercise_id)
+        VALUES ($1, $2, $3, $4)`,
+        [userId, seshId, exerName, exerId]
+    );
+};
+module.exports.trackInsertExerTag = (
+    userId,
+    seshId,
+    exerId,
+    eTag1 = null,
+    eTag2 = null,
+    eTag3 = null,
+    eTag4 = null,
+    eTag5 = null,
+    eTag6 = null,
+    eTag7 = null,
+    eTag8 = null,
+    eTag9 = null,
+    eTag10 = null
+) => {
+    return db.query(
+        `
+        INSERT INTO track_exercise_tags (user_id, wo_session_id, exercise_id, e_tag1, e_tag2, e_tag3, e_tag4, e_tag5, e_tag6, e_tag7, e_tag8, e_tag9, e_tag10)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)`,
+        [
+            userId,
+            seshId,
+            exerId,
+            eTag1,
+            eTag2,
+            eTag3,
+            eTag4,
+            eTag5,
+            eTag6,
+            eTag7,
+            eTag8,
+            eTag9,
+            eTag10,
+        ]
+    );
+};
+module.exports.trackInsertSet = (
+    userId,
+    seshId,
+    exerId,
+    setNum,
+    reps,
+    val1 = null,
+    units1 = null,
+    val2 = null,
+    units2 = null
+) => {
+    return db.query(
+        `
+        INSERT INTO track_sets_table
+        (user_id, wo_session_id, exercise_id, set_number, reps, val1, units1, val2, units2)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
+        [
+            userId,
+            seshId,
+            exerId,
+            setNum,
+            reps,
+            val1 || null,
+            units1 || null,
+            val2 || null,
+            units2 || null,
+        ]
+    );
+};
+module.exports.trackInsertWrktTag = (
+    userId,
+    seshId,
+    wrktId,
+    wo_tag1 = null,
+    wo_tag2 = null,
+    wo_tag3 = null,
+    wo_tag4 = null,
+    wo_tag5 = null,
+    wo_tag6 = null,
+    wo_tag7 = null,
+    wo_tag8 = null,
+    wo_tag9 = null,
+    wo_tag10 = null
+) => {
+    return db.query(
+        `
+        INSERT INTO track_workout_tags (user_id, wo_session_id, workout_id, wo_tag1, wo_tag2, wo_tag3, wo_tag4, wo_tag5, wo_tag6, wo_tag7, wo_tag8, wo_tag9, wo_tag10)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)`,
+        [
+            userId,
+            seshId,
+            wrktId,
+            wo_tag1,
+            wo_tag2,
+            wo_tag3,
+            wo_tag4,
+            wo_tag5,
+            wo_tag6,
+            wo_tag7,
+            wo_tag8,
+            wo_tag9,
+            wo_tag10,
+        ]
+    );
+};
+module.exports.trackInsertExersByWrkt = (userId, seshId, wrktId, exerId) => {
+    return db.query(
+        `
+        INSERT INTO track_workout_exercises (user_id, wo_session_id, workout_id, exercise_id)
+        VALUES ($1, $2, $3, $4)`,
+        [userId, seshId, wrktId, exerId]
     );
 };
 

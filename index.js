@@ -315,8 +315,8 @@ app.post("/save-workout", async (req, res) => {
         const check = await db.checkWorkout(id, woName);
         if (check.rows[0]) {
             wrktId = check.rows[0].wrkt_id;
-            await db.deleteWrktTags(myId, wrktId);
-            await db.deleteExersByWrkt(myId, wrktId);
+            await db.deleteWrktTags(id, wrktId);
+            await db.deleteExersByWrkt(id, wrktId);
         } else {
             const { rows } = await db.insertWorkout(id, woName);
             wrktId = rows[0].id;
@@ -329,19 +329,25 @@ app.post("/save-workout", async (req, res) => {
             }
         }
 
-        let exerIds = [];
         for (const exer of exers) {
             console.log("exer in loop: ", exer);
             const { rows } = await db.checkExercise(id, exer);
-            exerIds.push(rows[0].exer_id);
+            await db.insertExersByWrkt(id, wrktId, rows[0].exer_id);
         }
-        console.log("exerIds: ", exerIds);
 
-        for (const exer of exers) {
-            const ind = exers.indexOf(exer);
-            console.log("ind of current exer in loop: ", ind);
-            await db.insertExersByWrkt(id, wrktId, exerIds[ind]);
-        }
+        //------ I think these lines are made redundant be the for..of loop above, but brain is mush, so I'm keeping these lines just in case
+        // let exerIds = [];
+        // for (const exer of exers) {
+        //     console.log("exer in loop: ", exer);
+        //     const { rows } = await db.checkExercise(id, exer);
+        //     exerIds.push(rows[0].exer_id);
+        // }
+        // console.log("exerIds: ", exerIds);
+        // for (const exer of exers) {
+        //     const ind = exers.indexOf(exer);
+        //     console.log("ind of current exer in loop: ", ind);
+        //     await db.insertExersByWrkt(id, wrktId, exerIds[ind]);
+        // }
 
         console.log("END OF /SAVE-WORKOUT");
     } catch (e) {
@@ -349,7 +355,7 @@ app.post("/save-workout", async (req, res) => {
     }
 });
 
-////------------------------------- /track-workout ---------------------------------------------- //
+////------------------------------- Track Workout routes ---------------------------------------------- //
 app.get("/choose-workout", async (req, res) => {
     console.log("We're in /choose-workout");
 
@@ -366,9 +372,12 @@ app.get("/get-wo-data/:woId", async (req, res) => {
     const woId = req.params.woId;
 
     const respWoTags = await db.getWoTags(id, woId);
-    let woTags = respWoTags.rows.map((tag) => {
-        return tag.wo_tags;
-    });
+    let woTags = [];
+    if (respWoTags.rows) {
+        woTags = respWoTags.rows.map((tag) => {
+            return tag.wo_tags;
+        });
+    }
     console.log("woTags: ", woTags);
 
     const respExs = await db.getExersByWorkout(id, woId);
@@ -435,6 +444,178 @@ app.get("/get-wo-data/:woId", async (req, res) => {
     console.log("woData: ", woData);
 
     res.json(woData);
+});
+
+// ////------------------------------- /track-workout route ---------------------------------------------- //
+app.post("/track-workout", async (req, res) => {
+    console.log("We're in /track-workout!");
+    console.log("req.body: ", req.body);
+    const bod = req.body;
+
+    const id = req.session.userId;
+    const { woName } = bod;
+    const exersData = bod.exersData;
+    const { rows } = await db.checkWorkout(id, woName);
+    const woId = rows[0].wrkt_id;
+    console.log("woId: ", woId);
+
+    const resp = await db.insertWorkoutSession(id, woName, woId);
+    const seshId = resp.rows[0].id;
+    console.log("seshId: ", seshId);
+
+    try {
+        if (bod.woTags) {
+            let woTag1;
+            let woTag2;
+            let woTag3;
+            let woTag4;
+            let woTag5;
+            let woTag6;
+            let woTag7;
+            let woTag8;
+            let woTag9;
+            let woTag10;
+
+            let woTags = [
+                woTag1,
+                woTag2,
+                woTag3,
+                woTag4,
+                woTag5,
+                woTag6,
+                woTag7,
+                woTag8,
+                woTag9,
+                woTag10,
+            ];
+
+            for (const tag of bod.woTags) {
+                const ind = bod.woTags.indexOf(tag);
+                woTags[ind] = tag;
+            }
+
+            await db.trackInsertWrktTag(
+                id,
+                seshId,
+                woId,
+                woTags[0],
+                woTags[1],
+                woTags[2],
+                woTags[3],
+                woTags[4],
+                woTags[5],
+                woTags[6],
+                woTags[7],
+                woTags[8],
+                woTags[9]
+            );
+        }
+
+        for (const exer of exersData) {
+            console.log("exer in loop: ", exer);
+            const { rows } = await db.checkExercise(id, exer.exName);
+            await db.trackInsertExersByWrkt(id, seshId, woId, rows[0].exer_id);
+        }
+    } catch (e) {
+        console.log("ERROR in /track-workout Workout: ", e);
+    }
+
+    ////--------- TRACK EXERCISE ----------------- //
+    for (const exerData of exersData) {
+        const { exName, sets } = exerData;
+
+        try {
+            let exerId;
+
+            const check = await db.checkExercise(id, exName);
+            exerId = check.rows[0].exer_id;
+            console.log("exerId: ", exerId);
+            await db.trackInsertExercise(id, seshId, exName, exerId);
+
+            if (exerData.exTags) {
+                let eTag1;
+                let eTag2;
+                let eTag3;
+                let eTag4;
+                let eTag5;
+                let eTag6;
+                let eTag7;
+                let eTag8;
+                let eTag9;
+                let eTag10;
+
+                let eTags = [
+                    eTag1,
+                    eTag2,
+                    eTag3,
+                    eTag4,
+                    eTag5,
+                    eTag6,
+                    eTag7,
+                    eTag8,
+                    eTag9,
+                    eTag10,
+                ];
+
+                for (const tag of exerData.exTags) {
+                    const ind = exerData.exTags.indexOf(tag);
+                    eTags[ind] = tag;
+                }
+
+                await db.trackInsertExerTag(
+                    id,
+                    seshId,
+                    exerId,
+                    eTags[0],
+                    eTags[1],
+                    eTags[2],
+                    eTags[3],
+                    eTags[4],
+                    eTags[5],
+                    eTags[6],
+                    eTags[7],
+                    eTags[8],
+                    eTags[9]
+                );
+            }
+
+            for (const set of sets) {
+                let setNr = sets.indexOf(set) + 1;
+                let reps = set[0];
+
+                let units;
+                let val1;
+                let meas1;
+                let val2;
+                let meas2;
+
+                if (set[1]) {
+                    units = set[1];
+                    val1 = units[0][0];
+                    meas1 = units[0][1];
+
+                    if (units[1]) {
+                        val2 = units[1][0];
+                        meas2 = units[1][1];
+                    }
+                }
+
+                await db.trackInsertSet(
+                    id,
+                    seshId,
+                    exerId,
+                    setNr,
+                    reps,
+                    val1,
+                    meas1,
+                    val2,
+                    meas2
+                );
+            }
+        } catch (e) {
+            console.log("ERROR in /track-workout Exercises: ", e);
+        }
+    }
 });
 
 // ////------------------------------- /upload-image route ---------------------------------------------- //

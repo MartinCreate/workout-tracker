@@ -18,7 +18,7 @@ export default function TrackWorkout() {
     useEffect(() => {
         // dispatch(getPrivChatList());
         setMounted(true);
-        console.log("Trackr-Workout Component Loaded");
+        console.log("Track-Workout Component Loaded");
         document.body.addEventListener("click", setWoList([]));
     }, []);
 
@@ -33,27 +33,140 @@ export default function TrackWorkout() {
     const chooseWorkout = async () => {
         const { data } = await axios.get("/choose-workout");
 
-        console.log("data: ", data);
-
-        // let woNames = data.map((wo) => {
-        //     return wo.workout_name;
-        // });
-
-        // console.log("woNames: ", woNames);
         setWoList(data);
     };
 
-    //xxxx anchor
     const selectWo = async (e, woId, woName) => {
         setWoList([]);
-        console.log("e.target: ", e.target);
-        console.log("woId: ", woId);
-        console.log("woName: ", woName);
 
         const { data } = await axios.get(`/get-wo-data/${woId}`);
-        console.log("data: ", data);
         setWoData(data);
         setWoNm(woName);
+    };
+
+    const trackCompleteWorkout = async (e) => {
+        let trackWoData = {
+            woName: woNm,
+        };
+        console.log("e.target.parentElement: ", e.target.parentElement);
+        const parent = e.target.parentElement;
+        const ggP = parent.parentNode.parentNode;
+        console.log("ggP: ", ggP);
+
+        const woNav = ggP.getElementsByClassName("workout-nav")[0];
+        const woTagsVals = woNav.getElementsByClassName("tag-input");
+
+        if (woTagsVals.length != 0) {
+            let woTags = [];
+            for (let i = 0; i < woTagsVals.length; i++) {
+                if (woTagsVals[i].value) {
+                    woTags.push(woTagsVals[i].value);
+                }
+            }
+            trackWoData.woTags = woTags;
+        }
+
+        const exerN = ggP.getElementsByClassName("exer-name-input");
+        let exersArr = [];
+        for (let i = 0; i < exerN.length; i++) {
+            exersArr.push(exerN[i].value);
+        }
+
+        const exerDivs = ggP.getElementsByClassName("exer-div");
+
+        let exersData = [];
+
+        for (const exerdiv of exerDivs) {
+            const exerData = await trackExercise(exerdiv);
+            exersData.push(exerData);
+        }
+        console.log("exersData: ", exersData);
+        //xxxxx anchor
+
+        trackWoData.exersData = exersData;
+        console.log("trackWoData: ", trackWoData);
+
+        await axios.post("/track-workout", trackWoData);
+    };
+
+    const trackExercise = async (exerDiv) => {
+        let exerData = {};
+
+        const exerName = exerDiv.getElementsByClassName("exer-name-input")[0]
+            .value;
+
+        //error message if !workoutName
+        //error message if !exerName
+        exerData.exName = exerName;
+
+        //----- Tag data
+        const tags = exerDiv.getElementsByClassName("tag-input");
+        if (tags.length != 0) {
+            //1) delete tag-divs w/ empty inputs
+            for (let i = tags.length - 1; i > -1; i--) {
+                if (!tags[i].value) {
+                    const tagPar = tags[i].parentNode;
+                    tagPar.parentNode.removeChild(tagPar);
+                }
+            }
+
+            //2) get data from tags
+            if (tags.length != 0) {
+                let tagsArr = [];
+                for (let i = 0; i < tags.length; i++) {
+                    tagsArr.push(tags[i].value);
+                }
+                exerData.exTags = tagsArr;
+            }
+        }
+
+        //----- Sets data
+        const setDivs = exerDiv.getElementsByClassName("set-div");
+
+        if (setDivs.length != 0) {
+            let setsData = [];
+
+            for (let s = 0; s < setDivs.length; s++) {
+                let setData = [];
+                const reps = setDivs[s].getElementsByClassName("reps-inp")[0]
+                    .value;
+                //error message if reps is not a number
+
+                setData.push(reps);
+
+                const val = setDivs[s].getElementsByClassName("unit-val-inp");
+                const m = setDivs[s].getElementsByClassName("unit-measure-inp");
+                //error message if val is not a number
+                //error message if val.length != m.length
+
+                if (val.length != 0) {
+                    let units = [];
+
+                    for (let i = 0; i < val.length; i++) {
+                        let unit = [];
+                        const unitVal = val[i].value;
+                        const unitMeas = m[i].value;
+
+                        unit.push(unitVal);
+                        unit.push(unitMeas);
+
+                        units.push(unit);
+                    }
+                    setData.push(units);
+                }
+                setsData.push(setData);
+            }
+            exerData.sets = setsData;
+        }
+
+        console.log("exerData: ", exerData);
+        return exerData;
+        // //do axios post here
+        // try {
+        //     const resp = await axios.post("/submit-exercise", exerData);
+        // } catch (e) {
+        //     console.log("ERROR in POST /submit-exercise: ", e);
+        // }
     };
 
     //// ---------------------------- Functions used in dynamicalle generatedHTML ---------------------------------------- //
@@ -212,10 +325,10 @@ export default function TrackWorkout() {
         }
     };
 
-    const saveWorkout = async (e) => {
+    const updateWorkout = async (e) => {
         let woData = {};
         const parent = e.target.parentElement;
-        const gP = parent.parentNode;
+        const gP = parent.parentNode.parentNode;
         console.log("parent: ", parent);
         console.log("gP: ", gP);
 
@@ -414,7 +527,7 @@ export default function TrackWorkout() {
         exerDiv.appendChild(setsDiv);
 
         parent.appendChild(exerDiv);
-        const submitWo = parent.getElementsByClassName("submit-wo")[0];
+        const submitWo = parent.getElementsByClassName("submit-save-div")[0];
         parent.insertBefore(exerDiv, submitWo);
     };
 
@@ -834,17 +947,25 @@ export default function TrackWorkout() {
                                                         submitExercise(e)
                                                     }
                                                 >
-                                                    Save Exercise
+                                                    Update Exercise
                                                 </button>
                                             </div>
                                         </div>
                                     ))}
-                                <button
-                                    className="submit-wo"
-                                    onClick={(e) => saveWorkout(e)}
-                                >
-                                    Save Workout
-                                </button>
+                                <div className="submit-save-div">
+                                    <button
+                                        className="track-wo wo-button"
+                                        onClick={(e) => trackCompleteWorkout(e)}
+                                    >
+                                        Track Workout
+                                    </button>
+                                    <button
+                                        className="update-wo wo-button"
+                                        onClick={(e) => updateWorkout(e)}
+                                    >
+                                        Update {woNm}
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     )}
