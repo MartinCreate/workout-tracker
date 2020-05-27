@@ -56,7 +56,26 @@ main,
 .component {
     /* border: 1px red solid; */
     /* width: 100%; */
-    margin-top: 10%;
+    /* margin-top: 10%; */
+}
+.component h1 {
+    margin-top: 150px;
+}
+
+.back-home-link {
+    border: 2px grey solid;
+    border-radius: 10px;
+    text-decoration: none;
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-weight: bold;
+    color: grey;
+    cursor: pointer;
+    justify-self: flex-start;
+}
+.back-home-link:hover {
+    background-color: rgb(176, 175, 175);
+    color: white;
 }
 
 /* -------------------------- welcome ------------------------------------------------------- */
@@ -232,9 +251,12 @@ https://codepen.io/Takumari85/pen/RaYwpJ
     object-fit: contain;
 }
 
-/* -------------------------- Create-Workout ------------------------------------------------------- */
+/* ----------------------------- Create Workout ------------------------------------------------------- */
 #wo-creator-component {
     width: 100%;
+}
+#wo-creator-component h1 {
+    margin-top: 60px;
 }
 
 .collapse {
@@ -247,16 +269,18 @@ https://codepen.io/Takumari85/pen/RaYwpJ
     transition: max-height 0.2s ease-out;
 }
 
-#create-workout {
-    border: 2px grey solid;
-    border-radius: 20px;
+.big-button {
+    /* border: 2px grey solid; */
+    border-width: 4px;
+    border-radius: 50px;
     margin: 20px 0 0;
     padding: 10px 50px;
-    cursor: pointer;
+    font-weight: bold;
+    font-size: 18px;
+    color: rgba(0, 0, 0, 0.8);
+    /* background-color: rgba(0, 72, 255, 0.2); */
 }
-#create-workout:hover {
-    background-color: grey;
-}
+
 #wo-creator {
     /* border: 1px green solid; */
     width: 60%;
@@ -430,8 +454,8 @@ https://www.w3schools.com/howto/howto_js_collapsible.asp
     border-radius: 0 0 10px 10px;
     /* set to none display: none, becomes display: grid upon click*/
     /* For editing do display: grid; */
-    display: none;
     display: grid;
+    display: none;
 
     grid-template-rows: 60px 1fr;
     background-color: white;
@@ -532,8 +556,8 @@ https://www.w3schools.com/howto/howto_js_collapsible.asp
     grid-column: 1 / span 3;
 
     /* for editing make this display:grid */
-    /* display: none; */
     display: grid;
+    display: none;
     /* grid-template-rows: 60px; */
     grid-auto-rows: 45px;
 }
@@ -625,8 +649,32 @@ https://www.w3schools.com/howto/howto_js_collapsible.asp
     color: white;
     background-color: #1a4fc2d7;
 }
+/* ----------------------------- Track Workout ------------------------------------------------------- */
+/* xxxxx anchor */
+#choose-wo-list {
+    /* border: 1px red solid; */
+}
+#choose-workout {
+    border-radius: 2px;
+}
+.wo-li-el {
+    border: 2px grey solid;
+    border-top: none;
+    color: rgb(77, 77, 77);
+    font-weight: bold;
+    width: 100%;
+    padding: 15px 10px;
+    cursor: pointer;
+}
+.wo-li-el:hover {
+    background-color: rgb(150, 149, 149);
+    color: white;
+}
+.wo-li-el:last-child {
+    border-radius: 0 0 6px 6px;
+}
 
-/* ----- General ----- */
+/* ----------------------------- General ------------------------------------------------------- */
 .toggle-button {
     background-color: whitesmoke;
 }
@@ -657,6 +705,12 @@ https://www.w3schools.com/howto/howto_js_collapsible.asp
 .submit-exer {
     border-top: 1px lightgrey solid;
 }
+
+.big-button:hover {
+    background-color: orange;
+    color: white;
+}
+
 /* ----------------------------------------------- Phone Styling ---------------------------------------------------------- */
 @media screen and (min-width: 100px) and (max-width: 920px) {
     #home-menu-container {

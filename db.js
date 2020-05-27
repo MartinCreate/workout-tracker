@@ -62,26 +62,76 @@ module.exports.updatePassword = (email, password) => {
         [email, password]
     );
 };
-// ////// --------------------------------/submit-workout ------------------------------------------------//
-////--UPSERT
-module.exports.upsertWorkout = (id, wo_name) => {
+// ////// --------------------------------/save-workout ------------------------------------------------//
+module.exports.checkWorkout = (userId, wrktName) => {
+    return db.query(
+        `
+        SELECT id AS wrkt_id
+        FROM workouts
+        WHERE user_id = $1 AND workout_name = $2`,
+        [userId, wrktName]
+    );
+};
+module.exports.insertWorkout = (userId, wrktName) => {
     return db.query(
         `
         INSERT INTO workouts (user_id, workout_name)
         VALUES ($1, $2)
-        ON CONFLICT (workout_name) DO NOTHING`,
-        [id, wo_name]
+        RETURNING id`,
+        [userId, wrktName]
     );
 };
-module.exports.upsExerByWo = (id, wo_id, exer_id) => {
+module.exports.deleteWrktTags = (userId, wrktId) => {
     return db.query(
         `
-        INSERT INTO exercises (user_id, exercise_name)
-        VALUES ($1, $2)
-        ON CONFLICT (exercise_name) DO NOTHING`,
-        [id, exercise]
+        DELETE FROM workout_tags
+        WHERE user_id = $1 AND workout_id = $2`,
+        [userId, wrktId]
     );
 };
+module.exports.deleteExersByWrkt = (userId, wrktId) => {
+    return db.query(
+        `
+        DELETE FROM workout_exercises
+        WHERE user_id = $1 AND workout_id = $2`,
+        [userId, wrktId]
+    );
+};
+module.exports.insertWrktTag = (userId, wrktId, wrktTag) => {
+    return db.query(
+        `
+        INSERT INTO workout_tags (user_id, workout_id, wo_tags)
+        VALUES ($1, $2, $3)`,
+        [userId, wrktId, wrktTag]
+    );
+};
+module.exports.insertExersByWrkt = (userId, wrktId, exerId) => {
+    return db.query(
+        `
+        INSERT INTO workout_exercises (user_id, workout_id, exercise_id)
+        VALUES ($1, $2, $3)`,
+        [userId, wrktId, exerId]
+    );
+};
+// ////--UPSERT
+// module.exports.upsertWorkout = (id, wo_name) => {
+//     return db.query(
+//         `
+//         INSERT INTO workouts (user_id, workout_name)
+//         VALUES ($1, $2)
+//         ON CONFLICT (workout_name) DO NOTHING`,
+//         [id, wo_name]
+//     );
+// };
+// module.exports.upsExerByWo = (id, wo_id, exer_id) => {
+//     return db.query(
+//         `
+//         INSERT INTO exercises (user_id, exercise_name)
+//         VALUES ($1, $2)
+//         ON CONFLICT (exercise_name) DO NOTHING`,
+//         [id, exercise]
+//     );
+// };
 
 // ////// --------------------------------/submit-exercise ------------------------------------------------//
 module.exports.checkExercise = (userId, exerName) => {
@@ -207,6 +257,64 @@ module.exports.insertSet = (
 //         [user_id, age || null, city, checkUrl(url)]
 //     );
 // };
+
+// ////// --------------------------------/track-workout ------------------------------------------------//
+//// --------------/choose-workout -----------------//
+module.exports.getWorkouts = (userId) => {
+    return db.query(
+        `
+        SELECT * FROM workouts
+        WHERE user_id = $1
+        ORDER BY created_at DESC`,
+        [userId]
+    );
+};
+
+//// --------------/get-wo-data/:woId -----------------//
+module.exports.getWoTags = (userId, woId) => {
+    return db.query(
+        `
+        SELECT wo_tags FROM workout_tags
+        WHERE user_id = $1 AND workout_id = $2
+        ORDER BY wo_tags ASC`,
+        [userId, woId]
+    );
+};
+module.exports.getExersByWorkout = (userId, woId) => {
+    return db.query(
+        `
+        SELECT exercise_id FROM workout_exercises
+        WHERE user_id = $1 AND workout_id = $2
+        ORDER BY id ASC`,
+        [userId, woId]
+    );
+};
+module.exports.getExerNames = (exerId) => {
+    return db.query(
+        `
+        SELECT exercise_name FROM exercises
+        WHERE id = $1`,
+        [exerId]
+    );
+};
+module.exports.getExerSets = (userId, exerId) => {
+    return db.query(
+        `
+        SELECT * FROM sets_table
+        WHERE user_id = $1 AND exercise_id = $2
+        ORDER BY set_number ASC`,
+        [userId, exerId]
+    );
+};
+module.exports.getExerTags = (userId, exerId) => {
+    return db.query(
+        `
+        SELECT exer_tags FROM exercise_tags
+        WHERE user_id = $1 AND exercise_id = $2
+        ORDER BY exer_tags ASC`,
+        [userId, exerId]
+    );
+};
 
 // ////// --------------------------FROM SOCIAL NETWORK BELOW ------------------------------------------------//
 // ////// --------------------------------/user ------------------------------------------------//

@@ -239,30 +239,33 @@ app.post("/reset-pword/two", async (req, res) => {
 ////------------------------------- /submit-exercise ---------------------------------------------- //
 app.post("/submit-exercise", async (req, res) => {
     console.log("We're in /submit-exercise!");
+    console.log("req.body in /submit-exercise: ", req.body);
     const bod = req.body;
     const myId = req.session.userId;
-    console.log("req.body in /submit-exercise: ", req.body);
+    const { exName, sets } = req.body;
 
     try {
         let exerId;
 
-        const check = await db.checkExercise(myId, bod.exName);
+        const check = await db.checkExercise(myId, exName);
 
         if (check.rows[0]) {
             exerId = check.rows[0].exer_id;
             await db.deleteExerTags(myId, exerId);
             await db.deleteExerSets(myId, exerId);
         } else {
-            const { rows } = await db.insertExercise(myId, bod.exName);
+            const { rows } = await db.insertExercise(myId, exName);
             exerId = rows[0].id;
         }
 
-        for (const tag of bod.exTags) {
-            await db.insertExerTag(myId, exerId, tag);
+        if (bod.exTags) {
+            for (const tag of bod.exTags) {
+                await db.insertExerTag(myId, exerId, tag);
+            }
         }
 
-        for (const set of bod.sets) {
-            let setNr = bod.sets.indexOf(set) + 1;
+        for (const set of sets) {
+            let setNr = sets.indexOf(set) + 1;
             let reps = set[0];
 
             let units;
@@ -301,7 +304,137 @@ app.post("/submit-exercise", async (req, res) => {
 ////------------------------------- /save-workout ---------------------------------------------- //
 app.post("/save-workout", async (req, res) => {
     console.log("We're in /save-workout");
-    console.log("req.body inside /save-workout: ", req.body);
+    console.log("req.body in /save-workout: ", req.body);
+    const bod = req.body;
+    const id = req.session.userId;
+    const { woName, exers } = req.body;
+
+    try {
+        let wrktId;
+
+        const check = await db.checkWorkout(id, woName);
+        if (check.rows[0]) {
+            wrktId = check.rows[0].wrkt_id;
+            await db.deleteWrktTags(myId, wrktId);
+            await db.deleteExersByWrkt(myId, wrktId);
+        } else {
+            const { rows } = await db.insertWorkout(id, woName);
+            wrktId = rows[0].id;
+        }
+
+        if (bod.woTags) {
+            for (const tag of bod.woTags) {
+                console.log("tag inside loop: ", tag);
+                await db.insertWrktTag(id, wrktId, tag);
+            }
+        }
+
+        let exerIds = [];
+        for (const exer of exers) {
+            console.log("exer in loop: ", exer);
+            const { rows } = await db.checkExercise(id, exer);
+            exerIds.push(rows[0].exer_id);
+        }
+        console.log("exerIds: ", exerIds);
+
+        for (const exer of exers) {
+            const ind = exers.indexOf(exer);
+            console.log("ind of current exer in loop: ", ind);
+            await db.insertExersByWrkt(id, wrktId, exerIds[ind]);
+        }
+
+        console.log("END OF /SAVE-WORKOUT");
+    } catch (e) {
+        console.log("ERROR in /save-workout: ", e);
+    }
+});
+
+////------------------------------- /track-workout ---------------------------------------------- //
+app.get("/choose-workout", async (req, res) => {
+    console.log("We're in /choose-workout");
+
+    const { rows } = await db.getWorkouts(req.session.userId);
+    console.log("rows: ", rows);
+    res.json(rows);
+});
+
+app.get("/get-wo-data/:woId", async (req, res) => {
+    console.log("We're in /get-wo-data");
+
+    console.log("req.params.woId: ", req.params.woId);
+    const id = req.session.userId;
+    const woId = req.params.woId;
+
+    const respWoTags = await db.getWoTags(id, woId);
+    let woTags = respWoTags.rows.map((tag) => {
+        return tag.wo_tags;
+    });
+    console.log("woTags: ", woTags);
+
+    const respExs = await db.getExersByWorkout(id, woId);
+    let exerIds = respExs.rows.map((res) => {
+        return res.exercise_id;
+    });
+    console.log("exerIds: ", exerIds);
+
+    let exerSetsTags = [];
+    for (const exerId of exerIds) {
+        const respN = await db.getExerNames(exerId);
+        const exerName = respN.rows[0].exercise_name;
+        const { rows } = await db.getExerSets(id, exerId);
+
+        // console.log("rows SETS: ", rows);
+        let setsArr = rows.map((set) => {
+            let retSet = {
+                id: set.id,
+                setNr: set.set_number,
+                reps: set.reps,
+                date: set.created_at,
+            };
+
+            if (set.val1) {
+                retSet.units = [
+                    {
+                        val: set.val1,
+                        units: set.units1,
+                    },
+                ];
+                if (set.val2) {
+                    retSet.units.push({
+                        val: set.val2,
+                        units: set.units2,
+                    });
+                }
+            } else {
+                retSet.units = null;
+            }
+
+            return retSet;
+        });
+
+        console.log("setsArr: ", setsArr);
+
+        const respT = await db.getExerTags(id, exerId);
+        let tags = respT.rows.map((t) => {
+            return t.exer_tags;
+        });
+
+        const setsObj = {
+            exerId,
+            exerName,
+            sets: setsArr,
+            tags,
+        };
+        exerSetsTags.push(setsObj);
+    }
+    // console.log("exerSetsTags: ", exerSetsTags);
+    const woData = {
+        woTags,
+        exerSetsTags,
+    };
+    console.log("woData: ", woData);
+
+    res.json(woData);
 });
 
 // ////------------------------------- /upload-image route ---------------------------------------------- //

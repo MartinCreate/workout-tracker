@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { getPrivChatList, privChatMsg, clearChatMessages } from "./actions";
+import { useDispatch, useSelector } from "react-redux";
+// import { getPrivChatList, privChatMsg, clearChatMessages } from "./actions";
 
 import axios from "./axios";
 
@@ -28,18 +28,16 @@ export default function CreateWorkout() {
 
     //// ---------------------------- Functions used in dynamicalle generatedHTML ---------------------------------------- //
 
-    const delButton = (buttonLabel, className, type, name, id) => {
+    const delButton = (buttonLabel, className, kind) => {
         const delButton = document.createElement("button");
         delButton.innerHTML = buttonLabel;
-        if (type == "workout") {
+        if (kind == "workout") {
             delButton.addEventListener("click", (e) => deleteParent(e));
         } else {
             delButton.addEventListener("click", (e) => deleteElement(e));
         }
         delButton.classList.add("del-button");
         delButton.classList.add(className);
-        delButton.setAttribute("name", name);
-        // delButton.id = id;
 
         return delButton;
     };
@@ -51,13 +49,11 @@ export default function CreateWorkout() {
         const ggParent = gParent.parentNode;
 
         const deleteEl = e.target.parentElement;
-        // console.log("deleteEl: ", deleteEl);
         deleteEl.parentNode.removeChild(deleteEl);
 
         if (ggParent.getElementsByClassName("unit-div").length < 2) {
             const addUnit = ggParent.getElementsByClassName("set-unit-add")[0];
             console.log("addUnit: ", addUnit);
-            // addUnit.style.visibility = "visible";
             addUnit.style.display = "inline-block";
         }
         console.log("ggParent: ", ggParent);
@@ -81,19 +77,11 @@ export default function CreateWorkout() {
         const content = coll.nextElementSibling;
         console.log("content: ", content);
 
-        //collapse without animation
         if (content.style.display === "grid") {
             content.style.display = "none";
         } else {
             content.style.display = "grid";
         }
-
-        //collapse with animation
-        // if (content.style.maxHeight) {
-        //     content.style.maxHeight = null;
-        // } else {
-        //     content.style.maxHeight = content.scrollHeight + "px";
-        // }
     };
 
     const submitExercise = async (e) => {
@@ -197,6 +185,44 @@ export default function CreateWorkout() {
         }
     };
 
+    const saveWorkout = async (e) => {
+        let woData = {};
+        const parent = e.target.parentElement;
+        const gP = parent.parentNode;
+        console.log("parent: ", parent);
+        console.log("gP: ", gP);
+
+        const woName = gP.getElementsByClassName("wo-name")[0].value;
+        woData.woName = woName;
+
+        const woNav = gP.getElementsByClassName("workout-nav")[0];
+        const woTagsVals = woNav.getElementsByClassName("tag-input");
+
+        if (woTagsVals.length != 0) {
+            let woTags = [];
+            for (let i = 0; i < woTagsVals.length; i++) {
+                if (woTagsVals[i].value) {
+                    woTags.push(woTagsVals[i].value);
+                }
+            }
+            woData.woTags = woTags;
+        }
+
+        const exerNames = parent.getElementsByClassName("exer-name-input");
+        let exersArr = [];
+        for (let i = 0; i < exerNames.length; i++) {
+            exersArr.push(exerNames[i].value);
+        }
+        woData.exers = exersArr;
+
+        // console.log("woData: ", woData);
+        try {
+            await axios.post("/save-workout", woData);
+        } catch (e) {
+            console.log("ERROR in POST /save-workout: ", e);
+        }
+    };
+
     //// ---------------------------------------------- Dynamically Generating the HTML ---------------------------------------- //
     const addWorkout = () => {
         const woContainer = document.getElementById("wo-creator");
@@ -241,7 +267,7 @@ export default function CreateWorkout() {
 
         const submitWo = document.createElement("button");
         submitWo.classList.add("submit-wo");
-        submitWo.addEventListener("click", (e) => addExercise(e)); //CHANGE THIS to submitWorkout()
+        submitWo.addEventListener("click", (e) => saveWorkout(e)); //CHANGE THIS to submitWorkout()
         submitWo.innerHTML = "Save Workout";
 
         exersDiv.appendChild(exerAdd);
@@ -498,10 +524,18 @@ export default function CreateWorkout() {
     return (
         <div className="component-container">
             <div className="component" id="wo-creator-component">
+                <Link to="/" className="back-home-link">
+                    <p>Home Menu</p>
+                </Link>
                 <h1>Create Workout</h1>
-                <div id="create-workout" onClick={() => addWorkout()}>
+                <button
+                    id="create-workout"
+                    className="big-button"
+                    onClick={() => addWorkout()}
+                >
                     + Workout
-                </div>
+                </button>
+
                 <div id="wo-creator">
                     <div className="new-workout">
                         <div className="workout-nav">
@@ -691,7 +725,7 @@ export default function CreateWorkout() {
                             </div>
                             <button
                                 className="submit-wo"
-                                onClick={(e) => addExercise(e)}
+                                onClick={(e) => saveWorkout(e)}
                             >
                                 Save Workout
                             </button>

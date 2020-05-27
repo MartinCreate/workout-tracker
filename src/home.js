@@ -3,6 +3,8 @@ import { useSelector } from "react-redux";
 import axios from "./axios";
 import Profile from "./profile";
 import CreateWorkout from "./create-workout";
+import TrackWorkout from "./track-workout";
+
 import { BrowserRouter, Route, Link } from "react-router-dom";
 
 export default function Home() {
