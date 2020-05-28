@@ -725,6 +725,11 @@ app.get("*", function (req, res) {
 
 ////-------------------------------  Port ---------------------------------------------- //
 
-app.listen(8080, function () {
+// app.listen(8080, function () {
+//     console.log("trackerX server listening...");
+// });
+
+//for heroku
+app.listen(process.env.PORT || 8080, function () {
     console.log("trackerX server listening...");
 });
