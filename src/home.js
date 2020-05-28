@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import axios from "./axios";
 import Profile from "./profile";
@@ -9,14 +9,25 @@ import ViewWoData from "./view-workout-data";
 import { BrowserRouter, Route, Link } from "react-router-dom";
 
 export default function Home() {
-    useEffect(() => {}, []);
+    const [user, setUser] = useState();
+
+    useEffect(() => {
+        axios.get("/homepage").then(({ data }) => {
+            console.log("data: ", data);
+            setUser(data);
+        });
+    }, []);
+
+    useEffect(() => {
+        console.log("user: ", user);
+    }, [user]);
 
     return (
         <div className="component-container">
             <div className="component">
                 <h1>
-                    Welcome back
-                    {/* , {first} {last} */}
+                    Welcome, <br />
+                    {user && user.map((x) => <span key={x.id}>{x.first}</span>)}
                 </h1>
                 <a href="/logout" id="logout">
                     Logout

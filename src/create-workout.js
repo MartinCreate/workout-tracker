@@ -58,11 +58,21 @@ export default function CreateWorkout() {
         }
         console.log("ggParent: ", ggParent);
     };
-    const deleteElement = (e) => {
-        console.log("e.target: ", e.target);
+    const deleteElement = (e, tag) => {
         const deleteEl = e.target.parentElement;
         console.log("deleteEl: ", deleteEl);
+        const gP = deleteEl.parentNode;
+
         deleteEl.parentNode.removeChild(deleteEl);
+
+        if (tag) {
+            //yyyyy
+            if (gP.getElementsByClassName("tag").length < 10) {
+                const tagAdd = gP.getElementsByClassName("tag-add")[0];
+                // console.log("addUnit: ", addUnit);
+                tagAdd.style.display = "inline-block";
+            }
+        }
     };
     const deleteParent = (e) => {
         const deleteEl = e.target.parentElement;
@@ -356,7 +366,14 @@ export default function CreateWorkout() {
         const parent = e.target.parentElement;
         const newTagDiv = document.createElement("div");
         const tagInp = document.createElement("input");
-        const delTag = delButton("- Tag", "tag-del");
+
+        // const delTag = delButton("- Tag", "tag-del");
+        //yyyyyy
+        const delTag = document.createElement("button");
+        delTag.innerHTML = "- Tag";
+        delTag.addEventListener("click", (e) => deleteElement(e, true));
+        delTag.classList.add("del-button");
+        delTag.classList.add("tag-del");
 
         newTagDiv.classList.add("tag");
         tagInp.classList.add("tag-input");
@@ -366,6 +383,11 @@ export default function CreateWorkout() {
         newTagDiv.appendChild(tagInp);
         newTagDiv.appendChild(delTag);
         parent.appendChild(newTagDiv);
+
+        if (parent.getElementsByClassName("tag").length == 10) {
+            const tagAdd = parent.getElementsByClassName("tag-add")[0];
+            tagAdd.style.display = "none";
+        }
     };
 
     const addExercise = (e) => {
@@ -556,13 +578,14 @@ export default function CreateWorkout() {
         }
     };
 
+    // --- Render HTML
     return (
         <div className="component-container">
             <div className="component" id="wo-creator-component">
-                <Link to="/" className="back-home-link">
-                    <p>Home Menu</p>
-                </Link>
                 <h1>Create Workout</h1>
+                <Link to="/" className="back-home-link">
+                    <p>Home</p>
+                </Link>
                 <button
                     id="create-workout"
                     className="big-button"
@@ -572,7 +595,7 @@ export default function CreateWorkout() {
                 </button>
 
                 <div id="wo-creator">
-                    <div className="new-workout">
+                    {/* <div className="new-workout">
                         <div className="workout-nav">
                             <input
                                 type="text"
@@ -765,7 +788,7 @@ export default function CreateWorkout() {
                                 Save Workout
                             </button>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </div>

@@ -235,10 +235,17 @@ app.post("/reset-pword/two", async (req, res) => {
         res.json({ success: false });
     }
 });
+////------------------------------- /homepage ---------------------------------------------- //
+app.get("/homepage", async (req, res) => {
+    console.log("We're in /homepage!");
+
+    const { rows } = await db.getName(req.session.userId);
+    console.log("rows: ", rows);
+    res.json(rows);
+});
 
 ////------------------------------- /submit-exercise ---------------------------------------------- //
 app.post("/submit-exercise", async (req, res) => {
-    console.log("We're in /submit-exercise!");
     console.log("req.body in /submit-exercise: ", req.body);
     const bod = req.body;
     const myId = req.session.userId;
@@ -666,17 +673,38 @@ app.get("/view-basic-wo-data", async (req, res) => {
         });
         console.log("seshIds: ", seshIds);
 
+        // for (const s of seshData) {
+        //     const res = await db.getTrackedExers(s.seshId);
+        //     let exercises = [];
+        //     for (const r of res.rows) {
+        //         exercises.push(r.exer_name);
+        //     }
+        //     s.exers = exercises;
+        // }
         for (const s of seshData) {
             const res = await db.getTrackedExers(s.seshId);
-            let exersices = [];
+            let exercises = [];
             for (const r of res.rows) {
-                exersices.push(r.exer_name);
+                exercises.push({
+                    exerName: r.exer_name,
+                    exerId: r.exercise_id,
+                });
             }
-            s.exers = exersices;
+            s.exers = exercises;
         }
 
-        console.log("seshData: ", seshData);
+        //get sets
 
+        for (const s of seshData) {
+            for (const ex of s.exers) {
+                const res = await db.getTrackedSets(s.seshId, ex.exerId);
+                // console.log("res.rows: ", res.rows);
+                ex.sets = res.rows;
+            }
+        }
+        // console.log("seshData[0].exers: ", seshData[0].exers[0].sets);
+
+        console.log("seshData: ", seshData);
         res.json(seshData);
     } catch (e) {
         console.log("ERROR in /view-basic-wo-data: ", e);

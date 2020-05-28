@@ -69,7 +69,7 @@ export default function TrackWorkout() {
         };
         const parent = e.target.parentElement;
         const ggP = parent.parentNode.parentNode;
-        console.log("ggP in trackCompleteWorkout: ", ggP);
+        // console.log("ggP in trackCompleteWorkout: ", ggP);
 
         //for success/error msgs
         const par = ggP.getElementsByClassName("exercises-div")[0];
@@ -102,13 +102,13 @@ export default function TrackWorkout() {
             const exerData = await trackExercise(exerdiv);
             exersData.push(exerData);
         }
-        console.log("exersData: ", exersData);
+        // console.log("exersData: ", exersData);
 
         trackWoData.exersData = exersData;
-        console.log("trackWoData: ", trackWoData);
+        // console.log("trackWoData: ", trackWoData);
         try {
+            console.log("workout data being sent to index.js: ", trackWoData);
             const { data } = await axios.post("/track-workout", trackWoData);
-            console.log("data in trackCompleteWorkout: ", data);
 
             if (data == "success") {
                 ///xxxxx anchor
@@ -209,14 +209,7 @@ export default function TrackWorkout() {
             exerData.sets = setsData;
         }
 
-        console.log("exerData: ", exerData);
         return exerData;
-        // //do axios post here
-        // try {
-        //     const resp = await axios.post("/submit-exercise", exerData);
-        // } catch (e) {
-        //     console.log("ERROR in POST /submit-exercise: ", e);
-        // }
     };
 
     //// ---------------------------- Functions used in dynamicalle generatedHTML ---------------------------------------- //
@@ -250,11 +243,21 @@ export default function TrackWorkout() {
         }
         console.log("ggParent: ", ggParent);
     };
-    const deleteElement = (e) => {
-        console.log("e.target: ", e.target);
+    const deleteElement = (e, tag) => {
         const deleteEl = e.target.parentElement;
         console.log("deleteEl: ", deleteEl);
+        const gP = deleteEl.parentNode;
+
         deleteEl.parentNode.removeChild(deleteEl);
+
+        if (tag) {
+            //yyyyy
+            if (gP.getElementsByClassName("tag").length < 10) {
+                const tagAdd = gP.getElementsByClassName("tag-add")[0];
+                // console.log("addUnit: ", addUnit);
+                tagAdd.style.display = "inline-block";
+            }
+        }
     };
     const deleteParent = (e) => {
         const deleteEl = e.target.parentElement;
@@ -577,7 +580,13 @@ export default function TrackWorkout() {
         const parent = e.target.parentElement;
         const newTagDiv = document.createElement("div");
         const tagInp = document.createElement("input");
-        const delTag = delButton("- Tag", "tag-del");
+
+        // const delTag = delButton("- Tag", "tag-del");
+        const delTag = document.createElement("button");
+        delTag.innerHTML = "- Tag";
+        delTag.addEventListener("click", (e) => deleteElement(e, true));
+        delTag.classList.add("del-button");
+        delTag.classList.add("tag-del");
 
         newTagDiv.classList.add("tag");
         tagInp.classList.add("tag-input");
@@ -587,11 +596,15 @@ export default function TrackWorkout() {
         newTagDiv.appendChild(tagInp);
         newTagDiv.appendChild(delTag);
         parent.appendChild(newTagDiv);
+
+        if (parent.getElementsByClassName("tag").length == 10) {
+            const tagAdd = parent.getElementsByClassName("tag-add")[0];
+            tagAdd.style.display = "none";
+        }
     };
 
     const addExercise = (e) => {
         const parent = e.target.parentElement;
-        console.log("parent addExercise(e): ", parent);
 
         const exerDiv = document.createElement("div");
         exerDiv.classList.add("exer-div");
@@ -648,7 +661,6 @@ export default function TrackWorkout() {
 
     const addSet = (e) => {
         const parent = e.target.parentElement;
-        console.log("parent addSet(e): ", parent);
         const setDiv = document.createElement("div");
         setDiv.classList.add("set-div");
 
@@ -695,7 +707,6 @@ export default function TrackWorkout() {
         const grandparent = parent.parentNode;
 
         const clone = parent.cloneNode(true);
-        console.log("clone: ", clone);
 
         const addUnitClone = clone.getElementsByClassName("set-unit-add")[0];
         const copySetClone = clone.getElementsByClassName("set-copy")[0];
@@ -717,7 +728,6 @@ export default function TrackWorkout() {
     const addUnit = (e) => {
         const prevSib = e.target.previousSibling;
         const parent = e.target.parentElement;
-        console.log("parent addUnit(): ", parent);
         const unitDiv = document.createElement("div");
 
         const valInp = document.createElement("input");
@@ -777,13 +787,14 @@ export default function TrackWorkout() {
         }
     };
 
+    //-- Render HTML
     return (
         <div className="component-container">
             <div className="component" id="wo-creator-component">
-                <Link to="/" className="back-home-link">
-                    <p>Home Menu</p>
-                </Link>
                 <h1>Track Workout</h1>
+                <Link to="/" className="back-home-link">
+                    <p>Home</p>
+                </Link>
                 <div id="choose-wo-list">
                     <button
                         id="choose-workout"
