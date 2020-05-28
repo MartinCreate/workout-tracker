@@ -97,6 +97,13 @@ main,
     margin-top: 15%;
 }
 
+#home-title {
+    font-size: 40px;
+}
+#comma {
+    font-weight: 400;
+}
+
 /* -------------------------- Form ------------------------------------------------------- */
 /*
 Input field focus border-animation from (effect 2):

@@ -25,8 +25,8 @@ export default function Home() {
     return (
         <div className="component-container">
             <div className="component">
-                <h1>
-                    Welcome, <br />
+                <h1 id="home-title">
+                    Welcome<span id="comma">,</span>{" "}
                     {user && user.map((x) => <span key={x.id}>{x.first}</span>)}
                 </h1>
                 <a href="/logout" id="logout">

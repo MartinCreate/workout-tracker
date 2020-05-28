@@ -81,13 +81,13 @@ export default function ViewWoData() {
                             </div>
                         </div>
                         <div className="vd-table-content">
-                            <div className="vd-table-row">
+                            {/* <div className="vd-table-row">
                                 <div className="vd-col1">May 25 2020</div>
                                 <div className="vd-col2">Leg Day</div>
                                 <div className="vd-col3">
                                     Squats, Lunges, Jump Lunges
                                 </div>
-                            </div>
+                            </div> */}
                             {seshData &&
                                 seshData.map((s) => (
                                     <div
