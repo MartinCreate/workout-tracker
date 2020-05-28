@@ -296,6 +296,8 @@ app.post("/submit-exercise", async (req, res) => {
                 meas2
             );
         }
+
+        res.json("success");
     } catch (e) {
         console.log("ERROR in /submit-exercise: ", e);
     }
@@ -350,8 +352,10 @@ app.post("/save-workout", async (req, res) => {
         // }
 
         console.log("END OF /SAVE-WORKOUT");
+        res.json("success");
     } catch (e) {
         console.log("ERROR in /save-workout: ", e);
+        res.json("error");
     }
 });
 
@@ -514,10 +518,17 @@ app.post("/track-workout", async (req, res) => {
         for (const exer of exersData) {
             console.log("exer in loop: ", exer);
             const { rows } = await db.checkExercise(id, exer.exName);
-            await db.trackInsertExersByWrkt(id, seshId, woId, rows[0].exer_id);
+            await db.trackInsertExersByWrkt(
+                id,
+                seshId,
+                woId,
+                rows[0].exer_id,
+                exer.exName
+            );
         }
     } catch (e) {
         console.log("ERROR in /track-workout Workout: ", e);
+        res.json("error");
     }
 
     ////--------- TRACK EXERCISE ----------------- //
@@ -614,40 +625,63 @@ app.post("/track-workout", async (req, res) => {
             }
         } catch (e) {
             console.log("ERROR in /track-workout Exercises: ", e);
+            return res.json("error");
         }
     }
+
+    console.log("END OF POST /TRACK-WORKOUT");
+    res.json("success");
 });
 
-// ////------------------------------- /upload-image route ---------------------------------------------- //
-// //uploader.single('propertyKey from formData') runs the multer code from the boilerplate above
-// app.post("/upload-profile", uploader.single("file"), s3.upload, (req, res) => {
-//     const { user_id } = req.body;
+// ////------------------------------- /view-basic-wo-data route ---------------------------------------------- //
+app.get("/view-basic-wo-data", async (req, res) => {
+    console.log("We're in /view-basic-wo-data!");
+    const id = req.session.userId;
 
-//     if (req.file) {
-//         db.updateImgUrl(
-//             //this url is copied from aws page of image (without the id-characters at the end)
-//             "https://martinpaul-msg-socialnetwork.s3.eu-central-1.amazonaws.com/" +
-//                 req.file.filename,
-//             user_id
-//         )
-//             .then(({ rows }) => {
-//                 const resp = rows[0];
-//                 res.json({
-//                     resp,
-//                 });
-//             })
-//             .catch((err) => {
-//                 console.log("ERROR in updateImgUrl: ", err);
-//                 res.json({
-//                     success: false,
-//                 });
-//             });
-//     } else {
-//         res.json({
-//             success: false,
-//         });
-//     }
-// });
+    let woData = {};
+
+    try {
+        const { rows } = await db.getWoSessions(id);
+        console.log("rows db.getWoSessions(): ", rows);
+
+        let test = "123456789";
+        test = test.substring(0, 5);
+
+        console.log("test: ", test);
+
+        let seshIds = rows.map((sesh) => {
+            return sesh.id;
+        });
+
+        let seshData = rows.map((s) => {
+            let date = `${s.created_at}`;
+            date = date.substring(4, 15);
+            const session = {
+                seshId: s.id,
+                woName: s.workout_name,
+                woId: s.workout_id,
+                date,
+            };
+            return session;
+        });
+        console.log("seshIds: ", seshIds);
+
+        for (const s of seshData) {
+            const res = await db.getTrackedExers(s.seshId);
+            let exersices = [];
+            for (const r of res.rows) {
+                exersices.push(r.exer_name);
+            }
+            s.exers = exersices;
+        }
+
+        console.log("seshData: ", seshData);
+
+        res.json(seshData);
+    } catch (e) {
+        console.log("ERROR in /view-basic-wo-data: ", e);
+    }
+});
 
 ////------------------------------- * route ---------------------------------------------- //
 

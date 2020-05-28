@@ -232,12 +232,17 @@ https://codepen.io/Takumari85/pen/RaYwpJ
     border-radius: 50px;
     box-shadow: 0px 0px 10px 0px #1a4fc260;
     padding: 0 20px;
-
     width: 200px;
     height: 200px;
+
+    background-color: whitesmoke;
+    transform: scale(1);
+    transition-duration: 0.6s;
 }
 .home-menu-el:hover {
-    background-color: whitesmoke;
+    background-color: white;
+    transform: scale(1.1);
+    transition-duration: 0.3s;
 }
 .home-menu-el p {
     font-size: 20px;
@@ -419,6 +424,7 @@ https://www.w3schools.com/howto/howto_js_collapsible.asp
     color: grey;
     font-weight: bold;
     font-size: 18px;
+    margin-top: 30px;
 }
 .submit-wo:hover {
     color: white;
@@ -682,6 +688,7 @@ https://www.w3schools.com/howto/howto_js_collapsible.asp
     height: 50px;
     display: grid;
     grid-template-columns: 60% 40%;
+    margin-top: 30px;
 }
 
 .wo-button {
@@ -727,6 +734,65 @@ https://www.w3schools.com/howto/howto_js_collapsible.asp
     background-color: #1a4fc2d7;
 } */
 
+/* ----------------------------- View Workout Data ------------------------------------------------------- */
+#view-woData-container {
+    /* border: 1px red solid; */
+    width: 100%;
+    display: grid;
+    flex-direction: column;
+    /* justify-content: center; */
+    align-items: center;
+    margin-top: 30px;
+}
+#basic-data-table {
+    /* border: 1px blue solid; */
+    width: 80%;
+    justify-self: center;
+
+    display: grid;
+    grid-template-rows: 30px 1fr;
+}
+
+.table-header {
+    grid-column: 1 / span 3;
+
+    display: grid;
+
+    font-weight: bold;
+    border-bottom: 1px black solid;
+}
+.vd-nav {
+    /* border: 1px red solid; */
+    display: flex;
+    align-items: flex-end;
+}
+.vd-nav p {
+    padding: 0;
+    margin: 0;
+    text-align: baseline;
+}
+.vd-table-content {
+    /* border: 1px red solid; */
+    grid-row: 2 / span 1;
+    grid-column: 1 / span 3;
+
+    display: grid;
+    grid-auto-rows: auto;
+}
+.vd-table-row {
+    /* grid-row: 2 / span 1; */
+    grid-column: 1 / span 3;
+    display: grid;
+
+    padding-top: 20px;
+    border-bottom: 1px lightgrey solid;
+}
+
+.table-header,
+.vd-table-row {
+    grid-template-columns: 20% 30% 50%;
+}
+
 /* ----------------------------- General ------------------------------------------------------- */
 .toggle-button {
     background-color: whitesmoke;
@@ -767,6 +833,12 @@ https://www.w3schools.com/howto/howto_js_collapsible.asp
     color: white;
 }
 
+.success-save {
+    justify-self: center;
+    align-self: center;
+    font-weight: bold;
+    color: green;
+}
 /* ----------------------------------------------- Phone Styling ---------------------------------------------------------- */
 @media screen and (min-width: 100px) and (max-width: 920px) {
     #home-menu-container {

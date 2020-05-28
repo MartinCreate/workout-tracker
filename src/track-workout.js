@@ -36,6 +36,20 @@ export default function TrackWorkout() {
         setWoList(data);
     };
 
+    //remove existing msgs
+    const successMsgs = document.getElementsByClassName("success-save");
+    if (successMsgs) {
+        for (let i = 0; i < successMsgs.length; i++) {
+            successMsgs[i].remove();
+        }
+    }
+    const errorMsg = document.getElementsByClassName("error-save");
+    if (errorMsg) {
+        for (let i = 0; i < errorMsg.length; i++) {
+            errorMsg[i].remove();
+        }
+    }
+
     const selectWo = async (e, woId, woName) => {
         setWoList([]);
 
@@ -44,14 +58,22 @@ export default function TrackWorkout() {
         setWoNm(woName);
     };
 
+    const clearWoData = () => {
+        setWoData(null);
+        setWoNm(null);
+    };
+
     const trackCompleteWorkout = async (e) => {
         let trackWoData = {
             woName: woNm,
         };
-        console.log("e.target.parentElement: ", e.target.parentElement);
         const parent = e.target.parentElement;
         const ggP = parent.parentNode.parentNode;
-        console.log("ggP: ", ggP);
+        console.log("ggP in trackCompleteWorkout: ", ggP);
+
+        //for success/error msgs
+        const par = ggP.getElementsByClassName("exercises-div")[0];
+        const trackButtonDiv = ggP.getElementsByClassName("submit-save-div")[0];
 
         const woNav = ggP.getElementsByClassName("workout-nav")[0];
         const woTagsVals = woNav.getElementsByClassName("tag-input");
@@ -81,12 +103,40 @@ export default function TrackWorkout() {
             exersData.push(exerData);
         }
         console.log("exersData: ", exersData);
-        //xxxxx anchor
 
         trackWoData.exersData = exersData;
         console.log("trackWoData: ", trackWoData);
+        try {
+            const { data } = await axios.post("/track-workout", trackWoData);
+            console.log("data in trackCompleteWorkout: ", data);
 
-        await axios.post("/track-workout", trackWoData);
+            if (data == "success") {
+                ///xxxxx anchor
+
+                //remove existing msgs
+                const successMsgs = ggP.getElementsByClassName("success-save");
+                if (successMsgs) {
+                    for (let i = 0; i < successMsgs.length; i++) {
+                        successMsgs[i].remove();
+                    }
+                }
+                const errorMsg = ggP.getElementsByClassName("error-save");
+                if (errorMsg) {
+                    for (let i = 0; i < errorMsg.length; i++) {
+                        errorMsg[i].remove();
+                    }
+                }
+
+                // render feedback message
+                const goodMsg = document.createElement("div");
+                goodMsg.classList.add("success-save");
+                goodMsg.innerHTML = `This ${woNm} session has been tracked!`;
+
+                par.insertBefore(goodMsg, trackButtonDiv);
+            }
+        } catch (e) {
+            console.log("ERROR in trackCompleteWorkout(): ", e);
+        }
     };
 
     const trackExercise = async (exerDiv) => {
@@ -217,6 +267,14 @@ export default function TrackWorkout() {
         coll.classList.toggle("active");
         const content = coll.nextElementSibling;
 
+        const gP = coll.parentNode.parentNode;
+        const successMsgs = gP.getElementsByClassName("success-save");
+        if (successMsgs) {
+            for (let i = 0; i < successMsgs.length; i++) {
+                successMsgs[i].remove();
+            }
+        }
+
         if (content.style.display === "grid") {
             content.style.display = "none";
         } else {
@@ -226,13 +284,14 @@ export default function TrackWorkout() {
 
     const submitExercise = async (e) => {
         console.log("--- In submitExercise(e) ---");
+        const saveButton = e.target;
         const parent = e.target.parentElement;
         const gP = parent.parentNode;
         const gggP = gP.parentNode.parentNode;
         // console.log("e.target: ", e.target);
         // console.log("parent: ", parent);
-        // console.log("gParent: ", gP);
-        // console.log("gggP: ", gggP);
+        console.log("gParent: ", gP);
+        console.log("gggP: ", gggP);
 
         let exerData = {};
         // example of how exerData is structured
@@ -319,7 +378,36 @@ export default function TrackWorkout() {
         //do axios post here
         console.log("exerData: ", exerData);
         try {
-            const resp = await axios.post("/submit-exercise", exerData);
+            const { data } = await axios.post("/submit-exercise", exerData);
+            console.log("data: ", data);
+
+            if (data == "success") {
+                ///xxxxx anchor
+
+                //remove existing msgs
+                const successMsgs = parent.getElementsByClassName(
+                    "success-save"
+                );
+                if (successMsgs) {
+                    for (let i = 0; i < successMsgs.length; i++) {
+                        successMsgs[i].remove();
+                    }
+                }
+                const errorMsg = parent.getElementsByClassName("error-save");
+                if (errorMsg) {
+                    for (let i = 0; i < errorMsg.length; i++) {
+                        errorMsg[i].remove();
+                    }
+                }
+
+                // render feedback message
+                console.log("parent: ", parent);
+                const goodMsg = document.createElement("div");
+                goodMsg.classList.add("success-save");
+                goodMsg.innerHTML = "Exercise data has been saved!";
+                console.log("saveButton: ", saveButton);
+                parent.insertBefore(goodMsg, saveButton);
+            }
         } catch (e) {
             console.log("ERROR in POST /submit-exercise: ", e);
         }
@@ -331,6 +419,10 @@ export default function TrackWorkout() {
         const gP = parent.parentNode.parentNode;
         console.log("parent: ", parent);
         console.log("gP: ", gP);
+
+        //for success/error msgs
+        const par = gP.getElementsByClassName("exercises-div")[0];
+        const trackButtonDiv = gP.getElementsByClassName("submit-save-div")[0];
 
         const woName = gP.getElementsByClassName("wo-name")[0].value;
         woData.woName = woName;
@@ -348,7 +440,7 @@ export default function TrackWorkout() {
             woData.woTags = woTags;
         }
 
-        const exerNames = parent.getElementsByClassName("exer-name-input");
+        const exerNames = gP.getElementsByClassName("exer-name-input");
         let exersArr = [];
         for (let i = 0; i < exerNames.length; i++) {
             exersArr.push(exerNames[i].value);
@@ -357,7 +449,30 @@ export default function TrackWorkout() {
 
         // console.log("woData: ", woData);
         try {
-            await axios.post("/save-workout", woData);
+            const { data } = await axios.post("/save-workout", woData);
+            console.log("data in trackCompleteWorkout: ", data);
+
+            if (data == "success") {
+                //remove existing msgs
+                const successMsgs = gP.getElementsByClassName("success-save");
+                if (successMsgs) {
+                    for (let i = 0; i < successMsgs.length; i++) {
+                        successMsgs[i].remove();
+                    }
+                }
+                const errorMsg = gP.getElementsByClassName("error-save");
+                if (errorMsg) {
+                    for (let i = 0; i < errorMsg.length; i++) {
+                        errorMsg[i].remove();
+                    }
+                }
+                // render feedback message
+                const goodMsg = document.createElement("div");
+                goodMsg.classList.add("success-save");
+                goodMsg.innerHTML = `${woNm} has been updated!`;
+
+                par.insertBefore(goodMsg, trackButtonDiv);
+            }
         } catch (e) {
             console.log("ERROR in POST /save-workout: ", e);
         }
@@ -512,7 +627,7 @@ export default function TrackWorkout() {
 
         const submitExer = document.createElement("button");
         submitExer.classList.add("submit-exer");
-        submitExer.addEventListener("click", (e) => submitExercise(e)); //CHANGE THIS to submitExercise()
+        submitExer.addEventListener("click", (e) => submitExercise(e));
         submitExer.innerHTML = " Save Exercise";
 
         setsDiv.appendChild(setAdd);
@@ -738,9 +853,9 @@ export default function TrackWorkout() {
                                 </div>
                                 <button
                                     className="del-button wo-del"
-                                    onClick={(e) => deleteParent(e)}
+                                    onClick={(e) => clearWoData(e)}
                                 >
-                                    Delete Workout
+                                    Remove Workout
                                 </button>
                             </div>
                             <button

@@ -18,8 +18,8 @@ DROP TABLE IF EXISTS track_exercises;
 DROP TABLE IF EXISTS workout_session;
 
 -- DROP TABLE IF EXISTS workout_exercises;
-DROP TABLE IF EXISTS workout_tags;
-DROP TABLE IF EXISTS exercise_tags;
+-- DROP TABLE IF EXISTS workout_tags;
+-- DROP TABLE IF EXISTS exercise_tags;
 -- DROP TABLE IF EXISTS sets_table;
 -- DROP TABLE IF EXISTS exercises;
 -- DROP TABLE IF EXISTS workouts;
@@ -30,13 +30,13 @@ DROP TABLE IF EXISTS exercise_tags;
 --       workout_name VARCHAR(100) NOT NULL,
 --       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 --       );
-CREATE TABLE workout_tags(
-      id SERIAL PRIMARY KEY,
-      user_id INT NOT NULL REFERENCES users(id),
-      workout_id INT NOT NULL REFERENCES workouts(id),
-      wo_tags VARCHAR(255),
-      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      );
+-- CREATE TABLE workout_tags(
+--       id SERIAL PRIMARY KEY,
+--       user_id INT NOT NULL REFERENCES users(id),
+--       workout_id INT NOT NULL REFERENCES workouts(id),
+--       wo_tags VARCHAR(255),
+--       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+--       );
 -- CREATE TABLE exercises(
 --       id SERIAL PRIMARY KEY,
 --       user_id INT NOT NULL REFERENCES users(id),
@@ -55,13 +55,13 @@ CREATE TABLE workout_tags(
 --       units2 VARCHAR(100),
 --       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 --       );
-CREATE TABLE exercise_tags(
-      id SERIAL PRIMARY KEY,
-      user_id INT NOT NULL REFERENCES users(id),
-      exercise_id INT NOT NULL REFERENCES exercises(id),
-      exer_tags VARCHAR(255),
-      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      );
+-- CREATE TABLE exercise_tags(
+--       id SERIAL PRIMARY KEY,
+--       user_id INT NOT NULL REFERENCES users(id),
+--       exercise_id INT NOT NULL REFERENCES exercises(id),
+--       exer_tags VARCHAR(255),
+--       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+--       );
 -- CREATE TABLE workout_exercises(
 --       id SERIAL PRIMARY KEY,
 --       user_id INT NOT NULL REFERENCES users(id),
@@ -140,6 +140,7 @@ CREATE TABLE track_workout_exercises(
       wo_session_id INT NOT NULL REFERENCES workout_session(id),
       workout_id INT NOT NULL,
       exercise_id INT NOT NULL,
+      exer_name VARCHAR(255) NOT NULL,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
 

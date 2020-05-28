@@ -73,9 +73,16 @@ export default function CreateWorkout() {
     const collapse = (e) => {
         const coll = e.currentTarget;
         coll.classList.toggle("active");
-        console.log("coll: ", coll);
         const content = coll.nextElementSibling;
-        console.log("content: ", content);
+
+        ////xxxxxx remove success-save div
+        const gP = coll.parentNode.parentNode;
+        const successMsgs = gP.getElementsByClassName("success-save");
+        if (successMsgs) {
+            for (let i = 0; i < successMsgs.length; i++) {
+                successMsgs[i].remove();
+            }
+        }
 
         if (content.style.display === "grid") {
             content.style.display = "none";
@@ -86,6 +93,7 @@ export default function CreateWorkout() {
 
     const submitExercise = async (e) => {
         console.log("--- In submitExercise(e) ---");
+        const saveButton = e.target;
         const parent = e.target.parentElement;
         const gP = parent.parentNode;
         const gggP = gP.parentNode.parentNode;
@@ -179,7 +187,19 @@ export default function CreateWorkout() {
         //do axios post here
         console.log("exerData: ", exerData);
         try {
-            const resp = await axios.post("/submit-exercise", exerData);
+            const { data } = await axios.post("/submit-exercise", exerData);
+            console.log("data: ", data);
+
+            if (data == "success") {
+                ///xxxxx anchor
+                // render feedback message
+                console.log("parent: ", parent);
+                const goodMsg = document.createElement("div");
+                goodMsg.classList.add("success-save");
+                goodMsg.innerHTML = "Exercise data has been saved!";
+                console.log("saveButton: ", saveButton);
+                parent.insertBefore(goodMsg, saveButton);
+            }
         } catch (e) {
             console.log("ERROR in POST /submit-exercise: ", e);
         }
@@ -187,10 +207,11 @@ export default function CreateWorkout() {
 
     const saveWorkout = async (e) => {
         let woData = {};
+        const saveButton = e.target;
         const parent = e.target.parentElement;
         const gP = parent.parentNode;
-        console.log("parent: ", parent);
-        console.log("gP: ", gP);
+        console.log("parent in saveWorkout: ", parent);
+        console.log("gP in saveWorkout: ", gP);
 
         const woName = gP.getElementsByClassName("wo-name")[0].value;
         woData.woName = woName;
@@ -215,11 +236,25 @@ export default function CreateWorkout() {
         }
         woData.exers = exersArr;
 
-        // console.log("woData: ", woData);
+        console.log("woData in saveWorkout: ", woData);
         try {
-            await axios.post("/save-workout", woData);
+            const { data } = await axios.post("/save-workout", woData);
+
+            console.log("data in save Workout: ", data);
+
+            if (data == "success") {
+                ///xxxxx anchor
+                // render feedback message
+                console.log("parent: ", parent);
+                const goodMsg = document.createElement("div");
+                goodMsg.classList.add("success-save");
+                goodMsg.innerHTML = "Workout data has been saved!";
+                console.log("saveButton: ", saveButton);
+                parent.insertBefore(goodMsg, saveButton);
+            }
         } catch (e) {
             console.log("ERROR in POST /save-workout: ", e);
+            res.json("error");
         }
     };
 
@@ -267,7 +302,7 @@ export default function CreateWorkout() {
 
         const submitWo = document.createElement("button");
         submitWo.classList.add("submit-wo");
-        submitWo.addEventListener("click", (e) => saveWorkout(e)); //CHANGE THIS to submitWorkout()
+        submitWo.addEventListener("click", (e) => saveWorkout(e));
         submitWo.innerHTML = "Save Workout";
 
         exersDiv.appendChild(exerAdd);
