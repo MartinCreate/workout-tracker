@@ -887,11 +887,18 @@ https://www.w3schools.com/howto/howto_js_collapsible.asp
     color: white;
 }
 
-.success-save {
+.success-save,
+.error-save {
     justify-self: center;
     align-self: center;
     font-weight: bold;
+    text-align: center;
+}
+.success-save {
     color: green;
+}
+.error-save {
+    color: red;
 }
 /* ----------------------------------------------- Phone Styling ---------------------------------------------------------- */
 @media screen and (min-width: 100px) and (max-width: 920px) {

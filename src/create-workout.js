@@ -196,6 +196,16 @@ export default function CreateWorkout() {
 
         //do axios post here
         console.log("exerData: ", exerData);
+        if (!exerData.exName) {
+            const errMsg = document.createElement("div");
+            errMsg.classList.add("success-save");
+            errMsg.classList.add("error-save");
+            errMsg.innerHTML =
+                "Error: please make sure your exercise has a name and at least one filled out set";
+            parent.insertBefore(errMsg, saveButton);
+            console.log("Error, no exerName");
+            return;
+        }
         try {
             const { data } = await axios.post("/submit-exercise", exerData);
             console.log("data: ", data);
@@ -209,6 +219,14 @@ export default function CreateWorkout() {
                 goodMsg.innerHTML = "Exercise data has been saved!";
                 console.log("saveButton: ", saveButton);
                 parent.insertBefore(goodMsg, saveButton);
+            } else if (data == "error") {
+                const errMsg = document.createElement("div");
+                errMsg.classList.add("success-save");
+                errMsg.classList.add("error-save");
+                errMsg.innerHTML =
+                    "Error: please make sure your exercise has a name and at least one filled out set";
+                console.log("saveButton: ", saveButton);
+                parent.insertBefore(errMsg, saveButton);
             }
         } catch (e) {
             console.log("ERROR in POST /submit-exercise: ", e);

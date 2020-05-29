@@ -307,6 +307,7 @@ app.post("/submit-exercise", async (req, res) => {
         res.json("success");
     } catch (e) {
         console.log("ERROR in /submit-exercise: ", e);
+        res.json("error");
     }
 });
 
