@@ -11,9 +11,6 @@ export default function ViewWoData() {
     const [woList, setWoList] = useState([]);
     const [woData, setWoData] = useState();
     const [seshData, setSeshData] = useState();
-    // const elemRef = useRef(); //for autoscroll
-    // const myId = useSelector((state) => state.myId && state.myId);
-    // const newLogin = useSelector((state) => state.newLogin && state.newLogin);
 
     useEffect(() => {
         setMounted(true);

@@ -71,6 +71,14 @@ module.exports.updatePassword = (email, password) => {
         [email, password]
     );
 };
+// ////// --------------------------------choose exercise ------------------------------------------------//
+module.exports.getUserExerNames = (userId) => {
+    return db.query(
+        `
+        SELECT exercise_name FROM exercises WHERE user_id = $1 ORDER BY exercise_name ASC`,
+        [userId]
+    );
+};
 // ////// --------------------------------/save-workout ------------------------------------------------//
 module.exports.checkWorkout = (userId, wrktName) => {
     return db.query(

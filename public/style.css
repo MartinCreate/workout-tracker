@@ -477,26 +477,58 @@ https://www.w3schools.com/howto/howto_js_collapsible.asp
     border-radius: 0 0 10px 10px;
     /* set to none display: none, becomes display: grid upon click*/
     /* For editing do display: grid; */
-    display: grid;
     display: none;
+    display: grid;
 
-    grid-template-rows: 60px 1fr;
+    grid-template-rows: minmax(60px, auto) 1fr;
     background-color: white;
 }
 
+.addExerButtonsDiv {
+    /* border: 1px red solid; */
+    text-align: center;
+}
+.addExerButtonsDiv button {
+    margin: 15px 0 0;
+    height: 30px;
+    width: 25%;
+    font-size: 16px;
+}
 .exer-add {
     /* border: 2px grey solid; */
-    border-radius: 20px;
-    grid-row: 1 / span 1;
-    justify-self: center;
-    margin: 15px 0;
-    height: 30px;
-    width: 30%;
-    font-size: 16px;
+    border-radius: 20px 0 0 20px;
+}
+.exer-choose {
+    border-radius: 0 20px 20px 0;
+    border-left: none;
+}
+.exer-choices-div  {
+    border: 1px blue solid;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.exer-choices  {
+}
+.exer-choice {
+    /* border: 1px blue solid; */
+    padding: 5px 0;
+    font-weight: 600;
+    color: grey;
     cursor: pointer;
 }
-.exer-add:hover {
-    background-color: white;
+.exer-choice:last-child {
+    margin-bottom: 20px;
+}
+.exer-choice:hover {
+    background-color: rgb(182, 182, 182);
+    color: white;
+}
+.choose-from-exers {
+    border: 1px red solid;
+    margin: 0;
 }
 
 .exer-div {
@@ -579,8 +611,8 @@ https://www.w3schools.com/howto/howto_js_collapsible.asp
     grid-column: 1 / span 3;
 
     /* for editing make this display:grid */
-    display: grid;
     display: none;
+    display: grid;
     /* grid-template-rows: 60px; */
     grid-auto-rows: 45px;
 }

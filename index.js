@@ -244,6 +244,16 @@ app.get("/homepage", async (req, res) => {
     res.json(rows);
 });
 
+////------------------------------- /Choose exercise Routes ---------------------------------------------- //
+app.get("/get-ex-names", async (req, res) => {
+    try {
+        const { rows } = await db.getUserExerNames(req.session.userId);
+        console.log("rows: ", rows);
+        res.json(rows);
+    } catch (e) {
+        console.log("ERROR in /get-ex-names: ", e);
+    }
+});
 ////------------------------------- /submit-exercise ---------------------------------------------- //
 app.post("/submit-exercise", async (req, res) => {
     console.log("req.body in /submit-exercise: ", req.body);
