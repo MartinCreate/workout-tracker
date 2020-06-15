@@ -990,7 +990,7 @@ https://www.w3schools.com/howto/howto_js_collapsible.asp
     .toggle-tags,
     .wo-del {
         font-size: 20px;
-        /* height: 60px; */
+        height: 60px;
     }
 
     .toggle-tags,
@@ -998,7 +998,7 @@ https://www.w3schools.com/howto/howto_js_collapsible.asp
         border-radius: none;
         background-color: white;
         box-shadow: none;
-        height: 40px;
+        /* height: 40px; */
     }
 
     .submit-wo {
@@ -1013,6 +1013,11 @@ https://www.w3schools.com/howto/howto_js_collapsible.asp
 
     .exercises-div {
         grid-template-rows: minmax(80px, auto) 1fr;
+    }
+
+    .toggle-exercises {
+        height: 60px;
+        font-size: 20px;
     }
 
     .addExerButtonsDiv button {
@@ -1031,14 +1036,15 @@ https://www.w3schools.com/howto/howto_js_collapsible.asp
         align-items: center;
     }
 
-    /* .exer-choices  {
+    .exer-choices  {
     }
     .exer-choice {
-        padding: 5px 0;
-        font-weight: 600;
+        padding: 20px 0;
+        /* font-weight: 600;
         color: grey;
-        cursor: pointer;
+        cursor: pointer; */
     }
+
     .exer-choice:last-child {
         margin-bottom: 20px;
     }
@@ -1049,7 +1055,7 @@ https://www.w3schools.com/howto/howto_js_collapsible.asp
     .choose-from-exers {
         border: 1px red solid;
         margin: 0;
-    } */
+    }
 
     .exer-div {
         width: 95%;
@@ -1061,7 +1067,7 @@ https://www.w3schools.com/howto/howto_js_collapsible.asp
         /* grid-template-columns: repeat(3, 1fr); */
         /* grid-template-columns: 35% 40% 25%; */
         grid-template-columns: 65% 35%;
-        grid-template-rows: 50px auto;
+        grid-template-rows: auto;
     }
 
     .exer-name-input {
@@ -1070,6 +1076,7 @@ https://www.w3schools.com/howto/howto_js_collapsible.asp
         border-bottom: 1px lightgrey solid;
         border-radius: 10px 10px 0 0;
         text-align: center;
+        height: 60px;
     }
 
     /* .exer-nav .toggle-tags {
@@ -1079,7 +1086,7 @@ https://www.w3schools.com/howto/howto_js_collapsible.asp
     .exer-nav .toggle-tags,
     .exer-del {
         box-shadow: unset;
-        height: 40px;
+        height: 60px;
         border-bottom: none;
         background-color: white;
     }
@@ -1150,6 +1157,8 @@ https://www.w3schools.com/howto/howto_js_collapsible.asp
         justify-self: end;
         margin: 0;
 
+        height: 30px;
+
         width: 100%;
     }
 
@@ -1159,6 +1168,7 @@ https://www.w3schools.com/howto/howto_js_collapsible.asp
 
         display: grid;
         grid-template-rows: auto;
+        grid-row-gap: 30px;
 
         justify-self: start;
 
@@ -1170,7 +1180,8 @@ https://www.w3schools.com/howto/howto_js_collapsible.asp
         /* border-right: 1px blue solid; */
         border-right: none;
         grid-column: 1 / span 1;
-        margin: 30px 0 0;
+        /* margin: 0 0 30px; */
+        margin: 0;
     }
     .unit-val-inp {
         margin-left: 0;
