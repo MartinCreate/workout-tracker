@@ -157,7 +157,7 @@ export default function CreateWorkout() {
         const tagsDiv = createTagsDiv();
 
         const delWorkout = document.createElement("button");
-        delWorkout.innerHTML = "Delete Workout";
+        delWorkout.innerHTML = "Delete";
         delWorkout.addEventListener("click", (e) => delParent(e));
         delWorkout.classList.add("del-button");
         delWorkout.classList.add("wo-del");
@@ -287,7 +287,7 @@ export default function CreateWorkout() {
                                 className="del-button wo-del"
                                 onClick={(e) => delParent(e)}
                             >
-                                Delete Workout
+                                Delete
                             </button>
                         </div>
                         <button
@@ -302,7 +302,7 @@ export default function CreateWorkout() {
                                     className="exer-add"
                                     onClick={(e) => addExercise(e, "submit-wo")}
                                 >
-                                    + Exercise
+                                    New Exercise
                                 </button>
                                 <button
                                     className="exer-choose toggle-button"
@@ -360,7 +360,7 @@ export default function CreateWorkout() {
                                         className="exer-del"
                                         onClick={(e) => delParent(e)}
                                     >
-                                        Delete Exercise
+                                        Delete
                                     </button>
                                 </div>
                                 <button

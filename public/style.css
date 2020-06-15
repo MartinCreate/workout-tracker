@@ -608,12 +608,9 @@ https://www.w3schools.com/howto/howto_js_collapsible.asp
 
 /* ------------ Sets Div ------------- */
 .sets-div {
-    grid-column: 1 / span 3;
-
     /* for editing make this display:grid */
     display: none;
     display: grid;
-    /* grid-template-rows: 60px; */
     grid-auto-rows: 45px;
 }
 
@@ -887,8 +884,6 @@ https://www.w3schools.com/howto/howto_js_collapsible.asp
 .toggle-button:hover {
     background-color: rgba(255, 166, 0, 0.7);
     box-shadow: none;
-    /* background-color: #487be9; */
-    /* color: white; */
 }
 .active:hover {
     filter: contrast(130%);
@@ -932,15 +927,301 @@ https://www.w3schools.com/howto/howto_js_collapsible.asp
 .error-save {
     color: red;
 }
+
 /* ----------------------------------------------- Phone Styling ---------------------------------------------------------- */
-@media screen and (min-width: 100px) and (max-width: 920px) {
+@media screen and (min-width: 100px) and (max-width: 700px) {
     #home-menu-container {
-        /* border: 1px red solid; */
         grid-template-columns: 1fr;
         padding: 0;
         margin: 30px 0;
     }
     .home-menu-el {
         margin: 10px 0;
+    }
+
+    .big-button {
+        font-size: 25px;
+        margin-bottom: 50px;
+    }
+
+    /* ----------------------------- Create Workout - Phone ------------------------------------------------------- */
+    .new-workout {
+        width: 100%;
+    }
+
+    #wo-creator {
+        width: 100%;
+        min-width: unset;
+        padding: 0;
+    }
+
+    .new-workout {
+        box-shadow: 0px 0px 15px 10px #1a4fc260;
+        overflow: hidden;
+        margin-bottom: 50px;
+    }
+
+    /* --------------------- Workout Nav Bar - Phone ------------------------------ */
+    .workout-nav {
+        /* grid-template-columns: 34% 40% 26%; */
+        grid-template-columns: 65% 35%;
+        grid-template-rows: auto;
+    }
+
+    .wo-name {
+        grid-column: 1 / span 2;
+
+        padding: 5px 20px;
+        text-align: center;
+    }
+
+    .tags {
+        grid-template-rows: 40px auto;
+    }
+
+    .tag-input {
+        height: 40px;
+        box-sizing: border-box;
+        padding: 0 5px;
+        width: 100%;
+    }
+
+    .wo-name,
+    .toggle-tags,
+    .wo-del {
+        font-size: 20px;
+        /* height: 60px; */
+    }
+
+    .toggle-tags,
+    .wo-del {
+        border-radius: none;
+        background-color: white;
+        box-shadow: none;
+        height: 40px;
+    }
+
+    .submit-wo {
+        border-top: 2px lightgrey solid;
+        height: 80px;
+        font-size: 25px;
+        background-color: grey;
+        color: white;
+    }
+
+    /* --------------------- Exercise - Phone ------------------------------ */
+
+    .exercises-div {
+        grid-template-rows: minmax(80px, auto) 1fr;
+    }
+
+    .addExerButtonsDiv button {
+        margin: 30px 0 0;
+        height: 50px;
+        width: 40%;
+        font-size: 16px;
+    }
+
+    /* xxx get back to this */
+    .exer-choices-div  {
+        border: 1px blue solid;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    /* .exer-choices  {
+    }
+    .exer-choice {
+        padding: 5px 0;
+        font-weight: 600;
+        color: grey;
+        cursor: pointer;
+    }
+    .exer-choice:last-child {
+        margin-bottom: 20px;
+    }
+    .exer-choice:hover {
+        background-color: rgb(182, 182, 182);
+        color: white;
+    }
+    .choose-from-exers {
+        border: 1px red solid;
+        margin: 0;
+    } */
+
+    .exer-div {
+        width: 95%;
+        box-shadow: 0px 0px 5px 5px #1a4fc260;
+        margin-top: 50px;
+    }
+
+    .exer-nav {
+        /* grid-template-columns: repeat(3, 1fr); */
+        /* grid-template-columns: 35% 40% 25%; */
+        grid-template-columns: 65% 35%;
+        grid-template-rows: 50px auto;
+    }
+
+    .exer-name-input {
+        grid-column: 1 / span 2;
+        border: none;
+        border-bottom: 1px lightgrey solid;
+        border-radius: 10px 10px 0 0;
+        text-align: center;
+    }
+
+    /* .exer-nav .toggle-tags {
+        box-shadow: unset;
+    } */
+
+    .exer-nav .toggle-tags,
+    .exer-del {
+        box-shadow: unset;
+        height: 40px;
+        border-bottom: none;
+        background-color: white;
+    }
+
+    .exer-del {
+        border-left: 1px lightgrey solid;
+        border-radius: unset;
+    }
+
+    .sets-toggle {
+        border: none;
+        border-top: 3px lightgrey solid;
+        height: 50px;
+        font-size: 20px;
+    }
+
+    /* ------------ Sets Div - Phone ------------- */
+    .sets-div {
+        grid-auto-rows: auto;
+    }
+
+    .set-add {
+        height: 50px;
+        width: 100px;
+        font-size: 16px;
+        margin: 30px 0;
+    }
+
+    .set-div {
+        /* border: 1px blue solid; */
+        border-radius: 10px;
+        background-color: rgba(135, 206, 250, 0.3);
+        display: grid;
+        grid-template-columns: 70% 30%;
+        grid-auto-rows: auto;
+        align-items: center;
+        justify-items: center;
+        margin-bottom: 30px;
+        width: 100%;
+        position: relative;
+        padding: 10px;
+    }
+
+    .reps-inp,
+    .reps-label {
+        grid-column: 1 / span 2;
+        grid-row: 1 / span 1;
+    }
+
+    .reps-inp {
+        width: 80px;
+        height: 44px;
+        text-align: center;
+        justify-self: center;
+        margin: 20px 0;
+        font-size: 20px;
+    }
+    .reps-label {
+        position: absolute;
+        right: 105px;
+        font-size: 20px;
+    }
+
+    .set-unit-add {
+        grid-column: 2 / span 1;
+        grid-row: 2 / span 1;
+
+        justify-self: end;
+        margin: 0;
+
+        width: 100%;
+    }
+
+    .units-div {
+        grid-column: 1 / span 1;
+        grid-row: 2 / span 1;
+
+        display: grid;
+        grid-template-rows: auto;
+
+        justify-self: start;
+
+        align-items: center;
+        justify-items: start;
+    }
+
+    .unit-div {
+        /* border-right: 1px blue solid; */
+        border-right: none;
+        grid-column: 1 / span 1;
+        margin: 30px 0 0;
+    }
+    .unit-val-inp {
+        margin-left: 0;
+    }
+    .unit-del {
+        margin: 0;
+        margin-left: 10px;
+    }
+
+    .set-copy {
+        grid-column: 1 / span 1;
+        grid-row: 3 / span 1;
+
+        justify-self: start;
+        width: 100px;
+    }
+    .set-del {
+        grid-column: 2 / span 1;
+        grid-row: 3 / span 1;
+
+        width: 100%;
+    }
+
+    .set-del,
+    .set-copy {
+        margin: 30px 0 10px;
+        height: 40px;
+        font-size: 18px;
+    }
+
+    .unit-measure-inp {
+        width: 90px;
+    }
+
+    .submit-exer {
+        color: white;
+        border-top: 1px lightgrey solid;
+        background-color: lightgrey;
+        height: 60px;
+        font-size: 18px;
+        margin-top: 30px;
+    }
+
+    /* --- general phone ---- */
+
+    .active,
+    .toggle-button:hover {
+        background-color: rgba(255, 166, 0, 0.7);
+        box-shadow: none;
+    }
+    .active:hover {
+        filter: contrast(130%);
     }
 }

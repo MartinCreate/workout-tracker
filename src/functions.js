@@ -269,7 +269,7 @@ export const addExercise = (e, location) => {
     const delExer = document.createElement("button");
     delExer.classList.add("exer-del");
     delExer.addEventListener("click", (e) => delParent(e));
-    delExer.innerHTML = "Delete Exercise";
+    delExer.innerHTML = "Delete";
 
     const toggleSets = document.createElement("button");
     toggleSets.classList.add("sets-toggle");

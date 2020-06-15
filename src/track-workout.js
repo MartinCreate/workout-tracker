@@ -368,7 +368,7 @@ export default function TrackWorkout() {
                                     className="del-button wo-del"
                                     onClick={(e) => clearWoData(e)}
                                 >
-                                    Remove Workout
+                                    Remove
                                 </button>
                             </div>
                             <button
@@ -449,7 +449,7 @@ export default function TrackWorkout() {
                                                         delParent(e)
                                                     }
                                                 >
-                                                    Delete Exercise
+                                                    Remove
                                                 </button>
                                             </div>
                                             <button
