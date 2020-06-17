@@ -40,8 +40,8 @@ export const collapse = (e) => {
     const content = coll.nextElementSibling;
 
     //removing success/error message
-    const gP = coll.parentNode.parentNode;
-    const successMsgs = gP.getElementsByClassName("success-save");
+    // const gP = coll.parentNode.parentNode;
+    const successMsgs = document.getElementsByClassName("success-save");
     if (successMsgs) {
         for (let i = 0; i < successMsgs.length; i++) {
             successMsgs[i].remove();
@@ -52,6 +52,26 @@ export const collapse = (e) => {
         content.style.display = "none";
     } else {
         content.style.display = "grid";
+    }
+};
+export const collapseFlex = (e) => {
+    const coll = e.currentTarget;
+    coll.classList.toggle("active");
+    const content = coll.nextElementSibling;
+
+    //removing success/error message
+    // const gP = coll.parentNode.parentNode;
+    const successMsgs = document.getElementsByClassName("success-save");
+    if (successMsgs) {
+        for (let i = 0; i < successMsgs.length; i++) {
+            successMsgs[i].remove();
+        }
+    }
+
+    if (content.style.display === "flex") {
+        content.style.display = "none";
+    } else {
+        content.style.display = "flex";
     }
 };
 

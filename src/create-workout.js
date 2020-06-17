@@ -5,6 +5,7 @@ import axios from "./axios";
 import {
     delParent,
     collapse,
+    collapseFlex,
     createTagsDiv,
     addExercise,
     //uncomment these when editing the hardcoded html
@@ -49,10 +50,8 @@ export default function CreateWorkout() {
     };
 
     const getExNames = async (e) => {
-        //xx
         const p = e.target.parentElement;
         const { data } = await axios.get("/get-ex-names");
-        console.log("data: ", data);
 
         const exerList = p.getElementsByClassName("exer-choices")[0];
 
@@ -64,6 +63,7 @@ export default function CreateWorkout() {
         for (const exer of data) {
             const exLi = document.createElement("p");
             exLi.classList.add("exer-choice");
+            exLi.addEventListener("click", (e) => renderChosenExer(e));
             exLi.innerHTML = exer.exercise_name;
             docFrag.appendChild(exLi);
         }
@@ -192,20 +192,20 @@ export default function CreateWorkout() {
         const exerChoose = document.createElement("button");
         exerChoose.classList.add("exer-choose");
         exerChoose.classList.add("toggle-button");
-        exerChoose.addEventListener("click", (e) => collapse(e));
+        exerChoose.addEventListener("click", (e) => collapseFlex(e));
         exerChoose.innerHTML = "Choose Exercise";
 
         const exerChoicesDiv = document.createElement("div");
-        exerChoicesDiv.classList.add("exer-choices-div");
+        exerChoicesDiv.classList.add("exerchoices-div");
 
         const exerChoose2 = document.createElement("button");
-        exerChoose2.classList.add("exer-choose2");
+        exerChoose2.classList.add("my-exers-button");
         exerChoose2.addEventListener("click", (e) => getExNames(e));
-        exerChoose2.innerHTML = "Saved Exercises";
+        exerChoose2.innerHTML = "My Exercises";
 
         const exerChoices = document.createElement("div");
         exerChoices.classList.add("exer-choices");
-        exerChoices.classList.add("dropdown");
+        // exerChoices.classList.add("dropdown");
 
         exerChoicesDiv.appendChild(exerChoose2);
         exerChoicesDiv.appendChild(exerChoices);
@@ -213,7 +213,7 @@ export default function CreateWorkout() {
         exerButtonsDiv.appendChild(exerAdd);
         exerButtonsDiv.appendChild(exerChoose);
         exerButtonsDiv.appendChild(exerChoicesDiv);
-        //xx
+        //xxx
 
         ///------ NEW above
 
@@ -228,6 +228,101 @@ export default function CreateWorkout() {
         newWorkout.appendChild(exersDiv);
 
         woContainer.appendChild(newWorkout);
+    };
+
+    const renderChosenExer = (e) => {
+        const exerName = e.target.innerHTML;
+        console.log("exerName: ", exerName);
+
+        //xxx
+        //---------------------------------- addExercise copy below -------------------------------- //
+
+        const parent = document.getElementsByClassName("exercises-div")[0];
+        console.log("parent: ", parent);
+
+        const exerDiv = document.createElement("div");
+        exerDiv.classList.add("exer-div");
+
+        const exerNav = document.createElement("div");
+        exerNav.classList.add("exer-nav");
+
+        const exerInp = document.createElement("input");
+        exerInp.classList.add("exer-name-input");
+        exerInp.setAttribute("placeholder", "Exercise Name");
+        exerInp.setAttribute("value", exerName);
+
+        const tagsDiv = createTagsDiv();
+
+        const tagsInsert = tagsDiv.getElementsByClassName("tags")[0];
+        console.log("tags in renderChosenExer: ", tagsInsert);
+
+        // const parent = e.target.parentElement;
+
+        //INSERT DATA: exerTagsArr should be an array of exercise tags
+        for (let i = 0; i < exerTagsArr.length; i++) {
+            // const element = exerTagsArr[i];
+
+            const newTagDiv = document.createElement("div");
+            const tagInp = document.createElement("input");
+
+            //INSERT DATA:
+            const delTag = document.createElement("button");
+            delTag.innerHTML = "- Tag";
+            delTag.addEventListener("click", (e) => delEl(e, true));
+            delTag.classList.add("del-button");
+            delTag.classList.add("tag-del");
+
+            newTagDiv.classList.add("tag");
+            tagInp.classList.add("tag-input");
+            tagInp.type = "text";
+            tagInp.setAttribute("placeholder", "Tag Name");
+
+            newTagDiv.appendChild(tagInp);
+            newTagDiv.appendChild(delTag);
+            parent.appendChild(newTagDiv);
+        }
+
+        // const delExer = document.createElement("button");
+        // delExer.classList.add("exer-del");
+        // delExer.addEventListener("click", (e) => delParent(e));
+        // delExer.innerHTML = "Delete";
+
+        // const toggleSets = document.createElement("button");
+        // toggleSets.classList.add("sets-toggle");
+        // toggleSets.classList.add("toggle-button");
+        // toggleSets.addEventListener("click", (e) => collapse(e));
+        // toggleSets.innerHTML = "Sets";
+
+        // const setsDiv = document.createElement("div");
+        // setsDiv.classList.add("sets-div");
+        // setsDiv.classList.add("collapse");
+
+        // const setAdd = document.createElement("button");
+        // setAdd.classList.add("set-add");
+        // setAdd.addEventListener("click", (e) => addSet(e));
+        // setAdd.innerHTML = "+ Set";
+
+        // const submitExer = document.createElement("button");
+        // submitExer.classList.add("submit-exer");
+        // submitExer.addEventListener("click", (e) => submitExercise(e));
+        // submitExer.innerHTML = " Save Exercise";
+
+        // setsDiv.appendChild(setAdd);
+        // setsDiv.appendChild(submitExer);
+
+        exerNav.appendChild(exerInp);
+        // exerNav.appendChild(tagsDiv);
+        // exerNav.appendChild(delExer);
+
+        exerDiv.appendChild(exerNav);
+        // exerDiv.appendChild(toggleSets);
+        // exerDiv.appendChild(setsDiv);
+
+        parent.appendChild(exerDiv);
+        // console.log("parent: ", parent);
+        const submitWo = parent.getElementsByClassName("submit-wo")[0];
+        parent.insertBefore(exerDiv, submitWo);
+        //---------------------------------- addExercise copy above -------------------------------- //
     };
 
     // --- Render HTML
@@ -306,19 +401,23 @@ export default function CreateWorkout() {
                                 </button>
                                 <button
                                     className="exer-choose toggle-button"
-                                    onClick={(e) => collapse(e)}
+                                    onClick={(e) => collapseFlex(e)}
                                 >
                                     Choose Exercise
                                 </button>
-                                {/* xx */}
-                                <div className="exer-choices-div dropdown">
+                                <div className="exerchoices-div">
                                     <button
-                                        className="choose-from-exers"
+                                        className="my-exers-button"
                                         onClick={(e) => getExNames(e)}
                                     >
-                                        Saved Exercises
+                                        My Exercises
                                     </button>
-                                    <div className="exer-choices"></div>
+                                    {/* xxx */}
+                                    <div className="exer-choices">
+                                        <p onClick={(e) => renderChosenExer(e)}>
+                                            Example Exercise
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
                             <div className="exer-div">
