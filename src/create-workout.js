@@ -254,7 +254,7 @@ export default function CreateWorkout() {
                 </button>
 
                 <div id="wo-creator">
-                    <div className="new-workout">
+                    {/* <div className="new-workout">
                         <div className="workout-nav">
                             <input
                                 type="text"
@@ -330,7 +330,6 @@ export default function CreateWorkout() {
                                     >
                                         Load Exercises
                                     </button>
-                                    {/* xxx */}
                                     <div className="exer-choices"></div>
                                 </div>
                             </div>
@@ -408,7 +407,7 @@ export default function CreateWorkout() {
                                                     placeholder="units"
                                                 />
                                                 <datalist
-                                                    id="units" //gonna have to make this value custom
+                                                    id="units"
                                                     name="units"
                                                 >
                                                     <option value="kg"></option>
@@ -467,7 +466,7 @@ export default function CreateWorkout() {
                                 Save Workout
                             </button>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </div>
