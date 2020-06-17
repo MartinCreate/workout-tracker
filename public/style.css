@@ -371,7 +371,7 @@ https://www.w3schools.com/howto/howto_js_collapsible.asp
 .tags {
     /*display becomes 'grid', but for collapse we start it at 'none' */
     /* For editing do display: grid; */
-    /* display: grid; */
+    display: grid;
     display: none;
     grid-template-rows: 30px auto;
     width: 100%;
@@ -474,8 +474,8 @@ https://www.w3schools.com/howto/howto_js_collapsible.asp
     border-radius: 0 0 10px 10px;
     /* set to none display: none, becomes display: grid upon click*/
     /* For editing do display: grid; */
-    display: none;
     display: grid;
+    display: none;
 
     grid-template-rows: minmax(60px, auto) 1fr;
     background-color: white;
@@ -517,8 +517,8 @@ https://www.w3schools.com/howto/howto_js_collapsible.asp
     justify-self: center;
 
     /* for editing make display: flex */
-    display: none;
     display: flex;
+    display: none;
 
     flex-direction: column;
     align-items: center;
@@ -638,8 +638,8 @@ https://www.w3schools.com/howto/howto_js_collapsible.asp
 /* ------------ Sets Div ------------- */
 .sets-div {
     /* for editing make this display:grid */
-    display: none;
     display: grid;
+    display: none;
     grid-auto-rows: 45px;
 }
 
@@ -1248,6 +1248,31 @@ https://www.w3schools.com/howto/howto_js_collapsible.asp
         height: 60px;
         font-size: 18px;
         margin-top: 30px;
+    }
+
+    /* ----------------------------- Track Workout - Phone ------------------------------------------------------- */
+
+    /*xxx */
+
+    .submit-save-div {
+        /* border: 1px red solid; */
+        border-top: 1px grey solid;
+        box-shadow: inset 0px -13px 25px -27px rgba(0, 0, 0, 0.75);
+        width: 100%;
+        display: grid;
+        grid-template-columns: 60% 40%;
+        margin-top: 30px;
+        height: 80px;
+    }
+
+    .track-wo {
+        /* box-shadow: inset 0px -13px 25px -27px rgba(0, 0, 0, 0.75); */
+        font-size: 25px;
+    }
+
+    .update-wo {
+        /* box-shadow: inset 0px -13px 25px -27px rgba(0, 0, 0, 0.75); */
+        font-size: 25px;
     }
 
     /* --- general phone ---- */

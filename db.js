@@ -132,7 +132,7 @@ module.exports.insertExersByWrkt = (userId, wrktId, exerId) => {
 };
 
 // ////// --------------------------------/submit-exercise ------------------------------------------------//
-module.exports.checkExercise = (userId, exerName) => {
+module.exports.getExerId = (userId, exerName) => {
     return db.query(
         `
         SELECT id AS exer_id

@@ -254,6 +254,40 @@ app.get("/get-ex-names", async (req, res) => {
         console.log("ERROR in /get-ex-names: ", e);
     }
 });
+
+app.get("/get-ex-data/:exname", async (req, res) => {
+    const id = req.session.userId;
+    console.log("req.params.exname: ", req.params.exname);
+
+    try {
+        const { rows } = await db.getExerId(id, req.params.exname);
+        const exerId = rows[0].exer_id;
+        console.log("exerId: ", exerId);
+
+        //xxx
+        const tagsResp = await db.getExerTags(id, exerId);
+        const tagsRespRows = tagsResp.rows;
+        let tagsArr = [];
+        for (let i = 0; i < tagsRespRows.length; i++) {
+            tagsArr.push(tagsRespRows[i].exer_tags);
+        }
+
+        const setsResp = await db.getExerSets(id, exerId);
+        const setsArr = setsResp.rows;
+
+        const exerData = {
+            exercise: req.params.exname,
+            exerId,
+            tagsArr,
+            setsArr,
+        };
+
+        console.log("exerData in /get-ex-data: ", exerData);
+        res.json(exerData);
+    } catch (e) {
+        console.log("ERROR in /get-ex-data: ", e);
+    }
+});
 ////------------------------------- /submit-exercise ---------------------------------------------- //
 app.post("/submit-exercise", async (req, res) => {
     console.log("req.body in /submit-exercise: ", req.body);
@@ -264,7 +298,7 @@ app.post("/submit-exercise", async (req, res) => {
     try {
         let exerId;
 
-        const check = await db.checkExercise(myId, exName);
+        const check = await db.getExerId(myId, exName);
 
         if (check.rows[0]) {
             exerId = check.rows[0].exer_id;
@@ -351,7 +385,7 @@ app.post("/save-workout", async (req, res) => {
 
         for (const exer of exers) {
             console.log("exer in loop: ", exer);
-            const { rows } = await db.checkExercise(id, exer);
+            const { rows } = await db.getExerId(id, exer);
             await db.insertExersByWrkt(id, wrktId, rows[0].exer_id);
         }
 
@@ -359,7 +393,7 @@ app.post("/save-workout", async (req, res) => {
         // let exerIds = [];
         // for (const exer of exers) {
         //     console.log("exer in loop: ", exer);
-        //     const { rows } = await db.checkExercise(id, exer);
+        //     const { rows } = await db.getExerId(id, exer);
         //     exerIds.push(rows[0].exer_id);
         // }
         // console.log("exerIds: ", exerIds);
@@ -535,7 +569,7 @@ app.post("/track-workout", async (req, res) => {
 
         for (const exer of exersData) {
             console.log("exer in loop: ", exer);
-            const { rows } = await db.checkExercise(id, exer.exName);
+            const { rows } = await db.getExerId(id, exer.exName);
             await db.trackInsertExersByWrkt(
                 id,
                 seshId,
@@ -556,7 +590,7 @@ app.post("/track-workout", async (req, res) => {
         try {
             let exerId;
 
-            const check = await db.checkExercise(id, exName);
+            const check = await db.getExerId(id, exName);
             exerId = check.rows[0].exer_id;
             console.log("exerId: ", exerId);
             await db.trackInsertExercise(id, seshId, exName, exerId);

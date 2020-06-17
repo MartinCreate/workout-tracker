@@ -6,14 +6,17 @@ import {
     collapse,
     createTagsDiv,
     addExercise,
+    renderChosenExer,
+    getExNames,
+    collapseFlex,
     //uncomment these when editing the hardcoded html
-    // submitExercise,
-    // delEl,
-    // delUnit,
-    // addWoTag,
-    // addSet,
-    // duplicateSet,
-    // addUnit,
+    submitExercise,
+    delEl,
+    delUnit,
+    addWoTag,
+    addSet,
+    duplicateSet,
+    addUnit,
 } from "./functions";
 
 import axios from "./axios";
@@ -378,14 +381,37 @@ export default function TrackWorkout() {
                                 Exercises
                             </button>
                             <div className="exercises-div collapse">
-                                <button
-                                    className="exer-add"
-                                    onClick={(e) =>
-                                        addExercise(e, "submit-save-div")
-                                    }
-                                >
-                                    + Exercise
-                                </button>
+                                <div className="addExerButtonsDiv">
+                                    <button
+                                        className="exer-add"
+                                        onClick={(e) =>
+                                            addExercise(e, "submit-save-div")
+                                        }
+                                    >
+                                        New Exercise
+                                    </button>
+                                    <button
+                                        className="exer-choose toggle-button"
+                                        onClick={(e) => collapseFlex(e)}
+                                    >
+                                        My Exercises
+                                    </button>
+                                    <div className="exerchoices-div">
+                                        <button
+                                            className="my-exers-button"
+                                            onClick={(e) =>
+                                                getExNames(
+                                                    e,
+                                                    "submit-save-div",
+                                                    "Update Exercise"
+                                                )
+                                            }
+                                        >
+                                            Load Exercises
+                                        </button>
+                                        <div className="exer-choices"></div>
+                                    </div>
+                                </div>
                                 {woData &&
                                     woData.exerSetsTags.map((ex) => (
                                         <div
@@ -591,7 +617,7 @@ export default function TrackWorkout() {
                                         className="update-wo wo-button"
                                         onClick={(e) => updateWorkout(e)}
                                     >
-                                        Update {woNm}
+                                        Update
                                     </button>
                                 </div>
                             </div>

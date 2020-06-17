@@ -289,7 +289,7 @@ export const addExercise = (e, location) => {
     const delExer = document.createElement("button");
     delExer.classList.add("exer-del");
     delExer.addEventListener("click", (e) => delParent(e));
-    delExer.innerHTML = "Delete";
+    delExer.innerHTML = "Remove";
 
     const toggleSets = document.createElement("button");
     toggleSets.classList.add("sets-toggle");
@@ -326,6 +326,200 @@ export const addExercise = (e, location) => {
     console.log("parent: ", parent);
     const submitWo = parent.getElementsByClassName(location)[0];
     parent.insertBefore(exerDiv, submitWo);
+};
+
+export const renderChosenExer = async (e, location, submitExText) => {
+    const exerName = e.target.innerHTML;
+
+    const p = e.target.parentElement;
+    const parent = p.parentNode.parentNode.parentNode;
+    // console.log("parent: ", parent);
+
+    try {
+        const { data } = await axios.get(`/get-ex-data/${exerName}`);
+        // console.log("data from /get-ex-data: ", data);
+
+        const exerDiv = document.createElement("div");
+        exerDiv.classList.add("exer-div");
+
+        const exerNav = document.createElement("div");
+        exerNav.classList.add("exer-nav");
+
+        const exerInp = document.createElement("input");
+        exerInp.classList.add("exer-name-input");
+        exerInp.setAttribute("placeholder", "Exercise Name");
+        exerInp.setAttribute("value", exerName);
+
+        const tagsDiv = createTagsDiv();
+        const tagsInsert = tagsDiv.getElementsByClassName("tags")[0];
+
+        const tagsArr = data.tagsArr;
+        for (let i = 0; i < tagsArr.length; i++) {
+            const newTagDiv = document.createElement("div");
+            const tagInp = document.createElement("input");
+
+            const delTag = document.createElement("button");
+            delTag.innerHTML = "- Tag";
+            delTag.addEventListener("click", (e) => delEl(e, true));
+            delTag.classList.add("del-button");
+            delTag.classList.add("tag-del");
+
+            newTagDiv.classList.add("tag");
+            tagInp.classList.add("tag-input");
+            tagInp.type = "text";
+            tagInp.setAttribute("placeholder", "Tag Name");
+
+            tagInp.setAttribute("value", tagsArr[i]);
+
+            newTagDiv.appendChild(tagInp);
+            newTagDiv.appendChild(delTag);
+            tagsInsert.appendChild(newTagDiv);
+        }
+
+        const delExer = document.createElement("button");
+        delExer.classList.add("exer-del");
+        delExer.addEventListener("click", (e) => delParent(e));
+        delExer.innerHTML = "Remove";
+
+        const toggleSets = document.createElement("button");
+        toggleSets.classList.add("sets-toggle");
+        toggleSets.classList.add("toggle-button");
+        toggleSets.addEventListener("click", (e) => collapse(e));
+        toggleSets.innerHTML = "Sets";
+
+        const setsDiv = document.createElement("div");
+        setsDiv.classList.add("sets-div");
+        setsDiv.classList.add("collapse");
+
+        const setAdd = document.createElement("button");
+        setAdd.classList.add("set-add");
+        setAdd.addEventListener("click", (e) => addSet(e));
+        setAdd.innerHTML = "+ Set";
+
+        const submitExer = document.createElement("button");
+        submitExer.classList.add("submit-exer");
+        submitExer.addEventListener("click", (e) => submitExercise(e));
+        submitExer.innerHTML = submitExText;
+
+        setsDiv.appendChild(setAdd);
+        setsDiv.appendChild(submitExer);
+
+        const setsArr = data.setsArr;
+        for (let i = 0; i < setsArr.length; i++) {
+            const setDiv = document.createElement("div");
+            setDiv.classList.add("set-div");
+
+            const repsInp = document.createElement("input");
+            repsInp.classList.add("reps-inp");
+            repsInp.setAttribute("placeholder", "reps");
+            repsInp.setAttribute("value", setsArr[i].reps);
+
+            const pr = document.createElement("p");
+            pr.classList.add("reps-label");
+            pr.innerHTML = "r";
+
+            const unitsDiv = document.createElement("div");
+            unitsDiv.classList.add("units-div");
+
+            let unitsData = [];
+            if (setsArr[i].units1) {
+                let unitJ1 = [];
+                unitJ1.push(setsArr[i].units1);
+                unitJ1.push(setsArr[i].val1);
+                unitsData.push(unitJ1);
+
+                if (setsArr[i].units2) {
+                    let unitJ2 = [];
+                    unitJ2.push(setsArr[i].units2);
+                    unitJ2.push(setsArr[i].val2);
+                    unitsData.push(unitJ2);
+                }
+            }
+
+            for (let j = 0; j < unitsData.length; j++) {
+                const untDiv = returnUnitDiv();
+                const val = untDiv.getElementsByClassName("unit-val-inp")[0];
+                val.setAttribute("value", unitsData[j][1]);
+                const meas = untDiv.getElementsByClassName(
+                    "unit-measure-inp"
+                )[0];
+                meas.setAttribute("value", unitsData[j][0]);
+                unitsDiv.appendChild(untDiv);
+            }
+
+            const addUnits = document.createElement("button");
+            addUnits.classList.add("set-unit-add");
+            addUnits.innerHTML = "+ Unit";
+            addUnits.addEventListener("click", (e) => addUnit(e));
+
+            if (unitsData.length >= 2) {
+                addUnits.style.display = "none";
+            }
+
+            const copySet = document.createElement("button");
+            copySet.classList.add("set-copy");
+            copySet.innerHTML = "x2";
+            copySet.addEventListener("click", (e) => duplicateSet(e));
+            const delSet = document.createElement("button");
+            delSet.classList.add("set-del");
+            delSet.addEventListener("click", (e) => delEl(e));
+            delSet.innerHTML = "- Set";
+
+            setDiv.appendChild(repsInp);
+            setDiv.appendChild(pr);
+            setDiv.appendChild(unitsDiv);
+            setDiv.appendChild(addUnits);
+            setDiv.appendChild(copySet);
+            setDiv.appendChild(delSet);
+
+            setsDiv.insertBefore(setDiv, submitExer);
+        }
+
+        exerNav.appendChild(exerInp);
+        exerNav.appendChild(tagsDiv);
+        exerNav.appendChild(delExer);
+
+        exerDiv.appendChild(exerNav);
+        exerDiv.appendChild(toggleSets);
+        exerDiv.appendChild(setsDiv);
+
+        parent.appendChild(exerDiv);
+        const submitWo = parent.getElementsByClassName(location)[0];
+        parent.insertBefore(exerDiv, submitWo);
+
+        console.log("parent in renderChosenExer: ", parent);
+        const chButton = parent.getElementsByClassName("exer-choose")[0];
+        const chDiv = parent.getElementsByClassName("exerchoices-div")[0];
+
+        chButton.classList.remove("active");
+        chDiv.style.display = "none";
+    } catch (e) {
+        console.log("ERROR in renderChosenExer: ", e);
+    }
+};
+
+export const getExNames = async (e, location, submitExText) => {
+    const p = e.target.parentElement;
+    const { data } = await axios.get("/get-ex-names");
+
+    const exerList = p.getElementsByClassName("exer-choices")[0];
+
+    while (exerList.firstChild) {
+        exerList.removeChild(exerList.lastChild);
+    }
+
+    let docFrag = document.createDocumentFragment();
+    for (const exer of data) {
+        const exLi = document.createElement("p");
+        exLi.classList.add("exer-choice");
+        exLi.addEventListener("click", (e) =>
+            renderChosenExer(e, location, submitExText)
+        );
+        exLi.innerHTML = exer.exercise_name;
+        docFrag.appendChild(exLi);
+    }
+
+    exerList.appendChild(docFrag);
 };
 
 //only exported for editing hardcoded html
@@ -453,8 +647,67 @@ export const addUnit = (e) => {
 
     prevSib.appendChild(unitDiv);
 
-    if (parent.getElementsByClassName("unit-div").length == 2) {
+    if (parent.getElementsByClassName("unit-div").length >= 2) {
         const addUnit = parent.getElementsByClassName("set-unit-add")[0];
         addUnit.style.display = "none";
     }
+};
+
+export const returnUnitDiv = () => {
+    const unitDiv = document.createElement("div");
+
+    const valInp = document.createElement("input");
+    valInp.classList.add("unit-val-inp");
+    valInp.setAttribute("placeholder", "value");
+    valInp.type = "text";
+
+    const measureInp = document.createElement("input");
+    measureInp.classList.add("unit-measure-inp");
+    measureInp.setAttribute("placeholder", "units");
+    measureInp.setAttribute("list", "units");
+    measureInp.type = "text";
+
+    const unitsList = document.createElement("datalist");
+    unitsList.id = "units";
+    unitsList.setAttribute("name", "units");
+
+    const option1 = document.createElement("option");
+    const option2 = document.createElement("option");
+    const option3 = document.createElement("option");
+    const option4 = document.createElement("option");
+    const option5 = document.createElement("option");
+    option1.setAttribute("value", "kg");
+    option2.setAttribute("value", "lb");
+    option3.setAttribute("value", "sec");
+    option4.setAttribute("value", "sec/rep");
+    option5.setAttribute("value", "mins");
+    option1.innerHTML = "";
+    option2.innerHTML = "Pounds";
+    option3.innerHTML = "Seconds";
+    option4.innerHTML = "Seconds / Rep";
+    option5.innerHTML = "Minutes";
+    unitsList.appendChild(option1);
+    unitsList.appendChild(option2);
+    unitsList.appendChild(option3);
+    unitsList.appendChild(option4);
+    unitsList.appendChild(option5);
+
+    const unitDel = document.createElement("button");
+    unitDel.classList.add("unit-del");
+    unitDel.addEventListener("click", (e) => delUnit(e));
+    unitDel.innerHTML = "- Unit";
+
+    unitDiv.appendChild(valInp);
+    unitDiv.appendChild(measureInp);
+    unitDiv.appendChild(unitsList);
+    unitDiv.appendChild(unitDel);
+
+    unitDiv.classList.add("unit-div");
+
+    return unitDiv;
+
+    // if (parent.getElementsByClassName("unit-div").length == 2) {
+    //     const addUnit = parent.getElementsByClassName("set-unit-add")[0];
+    //     addUnit.style.display = "none";
+    // }
 };
