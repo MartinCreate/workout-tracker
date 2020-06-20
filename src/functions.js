@@ -14,17 +14,19 @@ export const delUnit = (e) => {
     }
 };
 
-export const delEl = (e, tag) => {
+export const delEl = (e, elClass) => {
     const deleteEl = e.target.parentElement;
     const gP = deleteEl.parentNode;
 
     deleteEl.parentNode.removeChild(deleteEl);
 
-    if (tag) {
-        if (gP.getElementsByClassName("tag").length < 10) {
+    if (elClass == "tag") {
+        if (gP.getElementsByClassName(elClass).length < 10) {
             const tagAdd = gP.getElementsByClassName("tag-add")[0];
             tagAdd.style.display = "inline-block";
         }
+    } else if (elClass == "set") {
+        setSetNumbers(gP);
     }
 };
 
@@ -162,7 +164,6 @@ export const submitExercise = async (e) => {
         exerData.sets = setsData;
     }
 
-    //do axios post here
     console.log("submitExercise data being sent to server: ", exerData);
     if (!exerData.exName) {
         const errMsg = document.createElement("div");
@@ -174,12 +175,12 @@ export const submitExercise = async (e) => {
         console.log("Error, no exerName");
         return;
     }
+
     try {
         const { data } = await axios.post("/submit-exercise", exerData);
         console.log("data after /submit-exercise: ", data);
 
         if (data == "success") {
-            ///xxxxx anchor
             //remove existing msgs
             const successMsgs = parent.getElementsByClassName("success-save");
             if (successMsgs) {
@@ -195,11 +196,11 @@ export const submitExercise = async (e) => {
             }
 
             // render feedback message
-            console.log("parent: ", parent);
+            // console.log("parent: ", parent);
             const goodMsg = document.createElement("div");
             goodMsg.classList.add("success-save");
             goodMsg.innerHTML = "Exercise data has been saved!";
-            console.log("saveButton: ", saveButton);
+            // console.log("saveButton: ", saveButton);
             parent.insertBefore(goodMsg, saveButton);
         } else if (data == "error") {
             const errMsg = document.createElement("div");
@@ -207,7 +208,7 @@ export const submitExercise = async (e) => {
             errMsg.classList.add("error-save");
             errMsg.innerHTML =
                 "Error: please make sure your exercise has a name and at least one filled out set";
-            console.log("saveButton: ", saveButton);
+            // console.log("saveButton: ", saveButton);
             parent.insertBefore(errMsg, saveButton);
         }
     } catch (e) {
@@ -251,7 +252,7 @@ export const addWoTag = (e) => {
 
     const delTag = document.createElement("button");
     delTag.innerHTML = "- Tag";
-    delTag.addEventListener("click", (e) => delEl(e, true));
+    delTag.addEventListener("click", (e) => delEl(e, "tag"));
     delTag.classList.add("del-button");
     delTag.classList.add("tag-del");
 
@@ -333,11 +334,9 @@ export const renderChosenExer = async (e, location, submitExText) => {
 
     const p = e.target.parentElement;
     const parent = p.parentNode.parentNode.parentNode;
-    // console.log("parent: ", parent);
 
     try {
         const { data } = await axios.get(`/get-ex-data/${exerName}`);
-        // console.log("data from /get-ex-data: ", data);
 
         const exerDiv = document.createElement("div");
         exerDiv.classList.add("exer-div");
@@ -360,7 +359,7 @@ export const renderChosenExer = async (e, location, submitExText) => {
 
             const delTag = document.createElement("button");
             delTag.innerHTML = "- Tag";
-            delTag.addEventListener("click", (e) => delEl(e, true));
+            delTag.addEventListener("click", (e) => delEl(e, "tag"));
             delTag.classList.add("del-button");
             delTag.classList.add("tag-del");
 
@@ -462,7 +461,7 @@ export const renderChosenExer = async (e, location, submitExText) => {
             copySet.addEventListener("click", (e) => duplicateSet(e));
             const delSet = document.createElement("button");
             delSet.classList.add("set-del");
-            delSet.addEventListener("click", (e) => delEl(e));
+            delSet.addEventListener("click", (e) => delEl(e, "set"));
             delSet.innerHTML = "- Set";
 
             setDiv.appendChild(repsInp);
@@ -482,12 +481,13 @@ export const renderChosenExer = async (e, location, submitExText) => {
         exerDiv.appendChild(exerNav);
         exerDiv.appendChild(toggleSets);
         exerDiv.appendChild(setsDiv);
+        setSetNumbers(setsDiv);
 
         parent.appendChild(exerDiv);
         const submitWo = parent.getElementsByClassName(location)[0];
         parent.insertBefore(exerDiv, submitWo);
 
-        console.log("parent in renderChosenExer: ", parent);
+        // console.log("parent in renderChosenExer: ", parent);
         const chButton = parent.getElementsByClassName("exer-choose")[0];
         const chDiv = parent.getElementsByClassName("exerchoices-div")[0];
 
@@ -551,7 +551,7 @@ export const addSet = (e) => {
 
     const delSet = document.createElement("button");
     delSet.classList.add("set-del");
-    delSet.addEventListener("click", (e) => delEl(e));
+    delSet.addEventListener("click", (e) => delEl(e, "set"));
     delSet.innerHTML = "- Set";
 
     setDiv.appendChild(repsInp);
@@ -564,6 +564,8 @@ export const addSet = (e) => {
 
     const submitExer = parent.getElementsByClassName("submit-exer")[0];
     parent.insertBefore(setDiv, submitExer);
+
+    setSetNumbers(parent);
 };
 
 //only exported for editing hardcoded html
@@ -580,7 +582,7 @@ export const duplicateSet = (e) => {
 
     addUnitClone.addEventListener("click", (e) => addUnit(e));
     copySetClone.addEventListener("click", (e) => duplicateSet(e));
-    delSetClone.addEventListener("click", (e) => delEl(e));
+    delSetClone.addEventListener("click", (e) => delEl(e, "set"));
     if (delUnitClone) {
         for (let i = 0; i < delUnitClone.length; i++) {
             delUnitClone[i].addEventListener("click", (e) => delUnit(e));
@@ -588,6 +590,12 @@ export const duplicateSet = (e) => {
     }
 
     grandparent.insertBefore(clone, parent.nextSibling);
+
+    console.log("grandparent in duplicate set: ", grandparent);
+    console.log("parent: ", parent);
+    console.log("clone: ", clone);
+
+    setSetNumbers(grandparent);
 };
 
 //only exported for editing hardcoded html
@@ -710,4 +718,22 @@ export const returnUnitDiv = () => {
     //     const addUnit = parent.getElementsByClassName("set-unit-add")[0];
     //     addUnit.style.display = "none";
     // }
+};
+
+const setSetNumbers = (setsDiv) => {
+    const sets = setsDiv.getElementsByClassName("set-div");
+    for (let i = 0; i < sets.length; i++) {
+        const currentSet = sets[i];
+        const firstEl = currentSet.getElementsByClassName("reps-inp")[0];
+        const setNumbIs = currentSet.getElementsByClassName("set-number")[0];
+
+        if (setNumbIs) {
+            setNumbIs.innerHTML = `${i + 1}.`;
+        } else {
+            const setNumb = document.createElement("p");
+            setNumb.classList.add("set-number");
+            setNumb.innerHTML = `${i + 1}.`;
+            currentSet.insertBefore(setNumb, firstEl);
+        }
+    }
 };

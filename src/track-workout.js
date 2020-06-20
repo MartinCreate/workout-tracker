@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import axios from "./axios";
 import {
     delParent,
     collapse,
@@ -18,8 +19,6 @@ import {
     duplicateSet,
     addUnit,
 } from "./functions";
-
-import axios from "./axios";
 
 export default function TrackWorkout() {
     const dispatch = useDispatch();
@@ -68,6 +67,7 @@ export default function TrackWorkout() {
         setWoList([]);
 
         const { data } = await axios.get(`/get-wo-data/${woId}`);
+        console.log("data woData: ", data);
         setWoData(data);
         setWoNm(woName);
     };
@@ -358,7 +358,7 @@ export default function TrackWorkout() {
                                                     <button
                                                         className="del-button tag-del"
                                                         onClick={(e) =>
-                                                            delEl(e)
+                                                            delEl(e, "tag")
                                                         }
                                                     >
                                                         - Tag
@@ -460,7 +460,10 @@ export default function TrackWorkout() {
                                                                     onClick={(
                                                                         e
                                                                     ) =>
-                                                                        delEl(e)
+                                                                        delEl(
+                                                                            e,
+                                                                            "tag"
+                                                                        )
                                                                     }
                                                                 >
                                                                     - Tag
@@ -496,6 +499,9 @@ export default function TrackWorkout() {
                                                         className="set-div"
                                                         key={set.id}
                                                     >
+                                                        <p className="set-number">
+                                                            {set.setNr}.
+                                                        </p>
                                                         <input
                                                             className="reps-inp"
                                                             placeholder="reps"
@@ -588,7 +594,7 @@ export default function TrackWorkout() {
                                                         <button
                                                             className="set-del"
                                                             onClick={(e) =>
-                                                                delEl(e)
+                                                                delEl(e, "set")
                                                             }
                                                         >
                                                             - Set

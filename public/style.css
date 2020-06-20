@@ -649,15 +649,20 @@ https://www.w3schools.com/howto/howto_js_collapsible.asp
 }
 
 .set-div {
+    position: relative;
     justify-self: center;
     align-self: center;
-    /* padding-bottom: 3px;
-    border-bottom: 1px grey solid; */
 }
 
-/* .set-div > .set-div {
-    align-self: center;
-} */
+.set-number {
+    /* position: absolute;
+    left: 0;
+    top: 0; */
+    display: inline-block;
+    color: grey;
+    margin-right: 20px;
+    font-family: "Times New Roman", Times, serif;
+}
 
 .reps-inp {
     width: 40px;
@@ -678,9 +683,7 @@ https://www.w3schools.com/howto/howto_js_collapsible.asp
 
 .unit-div {
     border-right: 1px blue solid;
-    /* border-left: 1px blue solid; */
     margin: 0 5px;
-    /* height: 30px; */
 }
 
 .reps-inp,
@@ -951,6 +954,18 @@ https://www.w3schools.com/howto/howto_js_collapsible.asp
     color: red;
 }
 
+/* For editing change display: none, to display: grid  yyy */
+/* .tags, */
+.exercises-div,
+.sets-div {
+    display: none;
+    display: grid;
+}
+/* .exerchoices-div {
+    display: flex;
+    display: none;
+} */
+
 /* ----------------------------------------------- Phone Styling ---------------------------------------------------------- */
 @media screen and (min-width: 100px) and (max-width: 700px) {
     #home-menu-container {
@@ -1143,6 +1158,17 @@ https://www.w3schools.com/howto/howto_js_collapsible.asp
         width: 100%;
         position: relative;
         padding: 10px;
+    }
+
+    .set-number {
+        position: absolute;
+        left: 10px;
+        top: 10px;
+        display: unset;
+
+        font-size: 22px;
+
+        /* margin-right: 20px; */
     }
 
     .reps-inp,
