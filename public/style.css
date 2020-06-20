@@ -955,16 +955,16 @@ https://www.w3schools.com/howto/howto_js_collapsible.asp
 }
 
 /* For editing change display: none, to display: grid  yyy */
-/* .tags, */
+.tags,
 .exercises-div,
 .sets-div {
-    display: none;
     display: grid;
+    display: none;
 }
-/* .exerchoices-div {
+.exerchoices-div {
     display: flex;
     display: none;
-} */
+}
 
 /* ----------------------------------------------- Phone Styling ---------------------------------------------------------- */
 @media screen and (min-width: 100px) and (max-width: 700px) {
