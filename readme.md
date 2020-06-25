@@ -87,39 +87,38 @@ A workout tracker that allows the user to create workouts, track them, and view 
 
 ![](./public/screenshots/1.png)
 
-##### Mobile
+<!-- ##### Mobile
 
-![](./public/screenshots/2.png | height=600)
+![](./public/screenshots/mobile/1.png) -->
 
 ### Create Worout Page
 
-![](./public/screenshots/3.png)
-![](./public/screenshots/4.png)
+#### A "Workout"
 
-### Search Page
+![](./public/screenshots/2.png)
 
-![](./public/screenshots/5.png)
-![](./public/screenshots/6.png)
-![](./public/screenshots/7.png)
+-   Workout Tags
+    ![](./public/screenshots/3.png)
 
-### Chat Page
+-   "Exercises" Section
+    ![](./public/screenshots/4.png)
 
--   Public Chat
-    ![](./public/screenshots/8.png)
-
--   Private Chat
-    -   Chatting with Dylan, Davida just sent me a message (orange highlight)
+    -   My Exercises
+        ![](./public/screenshots/5.png)
+    -   Exercise
+        ![](./public/screenshots/6.png)
+    -   Exercise Tags
+        ![](./public/screenshots/7.png)
+    -   Sets Section
+        ![](./public/screenshots/8.png)
+    -   Set
         ![](./public/screenshots/9.png)
-    -   Searching among friends (green: already chatting, red: no active chat)
-        ![](./public/screenshots/10.png)
 
-### Welcome Page
+        -   Set Units
+            ![](./public/screenshots/11.png)
+            ![](./public/screenshots/12.png)
+            ![](./public/screenshots/13.png)
+            ![](./public/screenshots/14.png)
 
--   Register
-    ![](./public/screenshots/11.png)
--   Login
-    ![](./public/screenshots/12.png)
--   Reset Password
-    ![](./public/screenshots/13.png)
--   Error Message (on register page)
-    ![](./public/screenshots/14.png)
+    -   Multiple exercises
+        ![](./public/screenshots/15.png)
