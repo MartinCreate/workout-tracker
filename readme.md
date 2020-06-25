@@ -1,6 +1,6 @@
 # TrackerX
 
-(work.in-progress)
+(work in progress)
 A workout tracker that allows the user to create workouts, track them, and view the tracked data.
 
 -   Sections
