@@ -5,8 +5,8 @@ A workout tracker that allows the user to create workouts, track them, and view 
 
 -   Sections
     -   Features
-    -   [Tech Stack](##-tech-stack)
-    -   [Screenshots](##-screenshots)
+    -   [Tech Stack](##tech-stack)
+    -   [Screenshots](##screenshots)
 
 ## Features
 
