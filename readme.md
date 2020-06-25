@@ -3,6 +3,11 @@
 (work.in-progress)
 A workout tracker that allows the user to create workouts, track them, and view the tracked data.
 
+-   Sections
+    -   [Features](##-features)
+    -   [Tech Stack](#-tech-stack)
+    -   [Screenshots](#-screenshots)
+
 ## Features
 
 -   Customizable units of measurement for sets (e.g. user can track seconds/repition, or seconds/eccentric-movement)
