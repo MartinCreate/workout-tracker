@@ -117,10 +117,13 @@ A workout tracker that allows the user to create workouts, track them, and view 
 
         -   Set Units
             ![](./public/screenshots/11.png)
-        -   Entering set Data
+
+        -   Entering set-data
             ![](./public/screenshots/12.png)
-        -   Adding a second unit
+
+        -   Adding a second unit of measurement
             ![](./public/screenshots/13.png)
+
         -   Multiple Sets
             ![](./public/screenshots/14.png)
 
