@@ -112,6 +112,7 @@ A workout tracker that allows the user to create workouts, track them, and view 
     -   Sets Section
         ![](./public/screenshots/8.png)
     -   Set
+
         ![](./public/screenshots/9.png)
 
         -   Set Units
