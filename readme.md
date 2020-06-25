@@ -89,7 +89,7 @@ A workout tracker that allows the user to create workouts, track them, and view 
 
 ##### Mobile
 
-![](./public/screenshots/2.png)
+![](./public/screenshots/2.png | height=600)
 
 ### Create Worout Page
 
