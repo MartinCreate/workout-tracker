@@ -10,6 +10,7 @@ import {
     renderChosenExer,
     getExNames,
     collapseFlex,
+    removeErrMsgs,
     //uncomment these when editing the hardcoded html
     submitExercise,
     delEl,

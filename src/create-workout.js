@@ -10,6 +10,8 @@ import {
     addExercise,
     renderChosenExer,
     getExNames,
+    removeErrMsgs,
+    removeMsgs,
     //uncomment these when editing the hardcoded html
     submitExercise,
     delEl,
@@ -103,15 +105,7 @@ export default function CreateWorkout() {
 
         const woName = gP.getElementsByClassName("wo-name")[0].value;
 
-        //-- Removing existing error Messages
-        const eMsgs = document.getElementsByClassName("error-save");
-        console.log("eMsgs: ", eMsgs);
-        if (eMsgs) {
-            for (let i = 0; i < eMsgs.length; i++) {
-                console.log("eMsgs[i]: ", eMsgs[i]);
-                eMsgs[i].remove();
-            }
-        }
+        removeMsgs();
 
         //--Formval - Error if no workout name
         if (!woName) {
@@ -148,7 +142,7 @@ export default function CreateWorkout() {
                 const noNameMsg = document.createElement("div");
                 noNameMsg.classList.add("success-save");
                 noNameMsg.classList.add("error-save");
-                noNameMsg.innerHTML = "Error: each exercise needs a name";
+                noNameMsg.innerHTML = "Error: please give each exercise a name";
 
                 parent.insertBefore(noNameMsg, saveButton);
 

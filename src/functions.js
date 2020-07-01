@@ -84,15 +84,7 @@ export const submitExercise = async (e) => {
     const gP = parent.parentNode;
     const gggP = gP.parentNode.parentNode;
 
-    //-- Removing existing error Messages
-    const eMsgs = document.getElementsByClassName("error-save");
-    console.log("eMsgs: ", eMsgs);
-    if (eMsgs) {
-        for (let i = 0; i < eMsgs.length; i++) {
-            console.log("eMsgs[i]: ", eMsgs[i]);
-            eMsgs[i].remove();
-        }
-    }
+    removeMsgs();
 
     let exerData = {};
     // example of how exerData is structured
@@ -744,6 +736,37 @@ const setSetNumbers = (setsDiv) => {
             setNumb.classList.add("set-number");
             setNumb.innerHTML = `${i + 1}.`;
             currentSet.insertBefore(setNumb, firstEl);
+        }
+    }
+};
+
+export const removeErrMsgs = () => {
+    const eMsgs = document.getElementsByClassName("error-save");
+    if (eMsgs) {
+        for (let i = 0; i < eMsgs.length; i++) {
+            eMsgs[i].remove();
+        }
+    }
+};
+export const removeSuccessMsgs = () => {
+    const successMsgs = document.getElementsByClassName("success-save");
+    if (successMsgs) {
+        for (let i = 0; i < successMsgs.length; i++) {
+            successMsgs[i].remove();
+        }
+    }
+};
+export const removeMsgs = () => {
+    const eMsgs = document.getElementsByClassName("error-save");
+    if (eMsgs) {
+        for (let i = 0; i < eMsgs.length; i++) {
+            eMsgs[i].remove();
+        }
+    }
+    const successMsgs = document.getElementsByClassName("success-save");
+    if (successMsgs) {
+        for (let i = 0; i < successMsgs.length; i++) {
+            successMsgs[i].remove();
         }
     }
 };
