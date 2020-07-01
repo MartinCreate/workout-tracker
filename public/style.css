@@ -484,6 +484,7 @@ https://www.w3schools.com/howto/howto_js_collapsible.asp
     grid-template-columns: 50% 50%;
     grid-template-rows: 100px auto;
     align-items: end;
+    margin-bottom: 20px;
 }
 .addExerButtonsDiv button {
     height: 50px;
@@ -909,7 +910,7 @@ https://www.w3schools.com/howto/howto_js_collapsible.asp
 .active,
 .toggle-button:hover {
     background-color: rgba(255, 166, 0, 0.7);
-    box-shadow: none;
+    /* box-shadow: none; */
 }
 .active:hover {
     filter: contrast(130%);
@@ -1280,23 +1281,23 @@ https://www.w3schools.com/howto/howto_js_collapsible.asp
     }
 
     .track-wo {
-        /* box-shadow: inset 0px -13px 25px -27px rgba(0, 0, 0, 0.75); */
         font-size: 25px;
     }
 
     .update-wo {
-        /* box-shadow: inset 0px -13px 25px -27px rgba(0, 0, 0, 0.75); */
         font-size: 25px;
     }
 
     /* --- general phone ---- */
-
-    .active,
     .toggle-button:hover {
-        background-color: rgba(255, 166, 0, 0.7);
-        box-shadow: none;
+        background-color: unset;
     }
-    .active:hover {
-        filter: contrast(130%);
+
+    .workout-nav .active {
+        background-color: rgba(255, 166, 0, 0.7);
+    }
+    .new-workout .active,
+    .exer-nav .active {
+        background-color: rgba(255, 166, 0, 0.7);
     }
 }

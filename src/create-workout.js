@@ -102,6 +102,29 @@ export default function CreateWorkout() {
         console.log("gP in saveWorkout: ", gP);
 
         const woName = gP.getElementsByClassName("wo-name")[0].value;
+
+        //-- Removing existing error Messages
+        const eMsgs = document.getElementsByClassName("error-save");
+        console.log("eMsgs: ", eMsgs);
+        if (eMsgs) {
+            for (let i = 0; i < eMsgs.length; i++) {
+                console.log("eMsgs[i]: ", eMsgs[i]);
+                eMsgs[i].remove();
+            }
+        }
+
+        //--Formval - Error if no workout name
+        if (!woName) {
+            const noNameMsg = document.createElement("div");
+            noNameMsg.classList.add("success-save");
+            noNameMsg.classList.add("error-save");
+            noNameMsg.innerHTML = "Error: please give your workout a name";
+
+            parent.insertBefore(noNameMsg, saveButton);
+            console.log("Error, no woName");
+            return;
+        }
+
         woData.woName = woName;
 
         const woNav = gP.getElementsByClassName("workout-nav")[0];
@@ -120,6 +143,18 @@ export default function CreateWorkout() {
         const exerNames = parent.getElementsByClassName("exer-name-input");
         let exersArr = [];
         for (let i = 0; i < exerNames.length; i++) {
+            //--Formval - Error if missing exercise name
+            if (!exerNames[i].value) {
+                const noNameMsg = document.createElement("div");
+                noNameMsg.classList.add("success-save");
+                noNameMsg.classList.add("error-save");
+                noNameMsg.innerHTML = "Error: each exercise needs a name";
+
+                parent.insertBefore(noNameMsg, saveButton);
+
+                console.log("Error, no exerName when Saving Workout");
+                return;
+            }
             exersArr.push(exerNames[i].value);
         }
         woData.exers = exersArr;

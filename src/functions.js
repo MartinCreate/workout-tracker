@@ -84,6 +84,16 @@ export const submitExercise = async (e) => {
     const gP = parent.parentNode;
     const gggP = gP.parentNode.parentNode;
 
+    //-- Removing existing error Messages
+    const eMsgs = document.getElementsByClassName("error-save");
+    console.log("eMsgs: ", eMsgs);
+    if (eMsgs) {
+        for (let i = 0; i < eMsgs.length; i++) {
+            console.log("eMsgs[i]: ", eMsgs[i]);
+            eMsgs[i].remove();
+        }
+    }
+
     let exerData = {};
     // example of how exerData is structured
     // exerData = {
