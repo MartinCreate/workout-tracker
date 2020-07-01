@@ -407,6 +407,17 @@ app.post("/save-workout", async (req, res) => {
         res.json("success");
     } catch (e) {
         console.log("ERROR in /save-workout: ", e);
+
+        const eStr = e.toString();
+        if (
+            eStr.includes(
+                "TypeError: Cannot read property 'exer_id' of undefined"
+            )
+        ) {
+            // res.json("Error: save each new exercise");
+            res.json("Err: unsaved exers");
+            return;
+        }
         res.json("error");
     }
 });

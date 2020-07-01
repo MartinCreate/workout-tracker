@@ -11,6 +11,7 @@ import {
     getExNames,
     collapseFlex,
     removeErrMsgs,
+    removeMsgs,
     //uncomment these when editing the hardcoded html
     submitExercise,
     delEl,
@@ -79,6 +80,7 @@ export default function TrackWorkout() {
     };
 
     const trackCompleteWorkout = async (e) => {
+        removeMsgs();
         let trackWoData = {
             woName: woNm,
         };
@@ -126,22 +128,6 @@ export default function TrackWorkout() {
             const { data } = await axios.post("/track-workout", trackWoData);
 
             if (data == "success") {
-                ///xxxxx anchor
-
-                //remove existing msgs
-                const successMsgs = ggP.getElementsByClassName("success-save");
-                if (successMsgs) {
-                    for (let i = 0; i < successMsgs.length; i++) {
-                        successMsgs[i].remove();
-                    }
-                }
-                const errorMsg = ggP.getElementsByClassName("error-save");
-                if (errorMsg) {
-                    for (let i = 0; i < errorMsg.length; i++) {
-                        errorMsg[i].remove();
-                    }
-                }
-
                 // render feedback message
                 const goodMsg = document.createElement("div");
                 goodMsg.classList.add("success-save");

@@ -30,22 +30,11 @@ export default function CreateWorkout() {
     const [exData, setExData] = useState();
 
     // const elemRef = useRef(); //for autoscroll
-    // const myId = useSelector((state) => state.myId && state.myId);
-    // const newLogin = useSelector((state) => state.newLogin && state.newLogin);
 
     useEffect(() => {
-        // dispatch(getPrivChatList());
         setMounted(true);
         console.log("Create-Workout Component Loaded");
     }, []);
-
-    // const findInd = (arr, prop, val) => {
-    //     for (var i = 0; i < arr.length; i++) {
-    //         if (arr[i][prop] === val) {
-    //             return i;
-    //         }
-    //     }
-    // };
 
     ///------ NEW below
     const closeDropDowns = () => {
@@ -166,6 +155,16 @@ export default function CreateWorkout() {
                 goodMsg.innerHTML = "Workout data has been saved!";
                 console.log("saveButton: ", saveButton);
                 parent.insertBefore(goodMsg, saveButton);
+            } else if (data == "Err: unsaved exers") {
+                const noNameMsg = document.createElement("div");
+                noNameMsg.classList.add("success-save");
+                noNameMsg.classList.add("error-save");
+                noNameMsg.innerHTML = "Error: please save each new exercise";
+
+                parent.insertBefore(noNameMsg, saveButton);
+
+                console.log("Error, unsaved exers");
+                return;
             }
         } catch (e) {
             console.log("ERROR in POST /save-workout: ", e);

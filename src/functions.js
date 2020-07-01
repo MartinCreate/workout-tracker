@@ -183,26 +183,12 @@ export const submitExercise = async (e) => {
         console.log("data after /submit-exercise: ", data);
 
         if (data == "success") {
-            //remove existing msgs
-            const successMsgs = parent.getElementsByClassName("success-save");
-            if (successMsgs) {
-                for (let i = 0; i < successMsgs.length; i++) {
-                    successMsgs[i].remove();
-                }
-            }
-            const errorMsg = parent.getElementsByClassName("error-save");
-            if (errorMsg) {
-                for (let i = 0; i < errorMsg.length; i++) {
-                    errorMsg[i].remove();
-                }
-            }
+            removeMsgs();
 
             // render feedback message
-            // console.log("parent: ", parent);
             const goodMsg = document.createElement("div");
             goodMsg.classList.add("success-save");
             goodMsg.innerHTML = "Exercise data has been saved!";
-            // console.log("saveButton: ", saveButton);
             parent.insertBefore(goodMsg, saveButton);
         } else if (data == "error") {
             const errMsg = document.createElement("div");
