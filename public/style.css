@@ -813,6 +813,10 @@ https://www.w3schools.com/howto/howto_js_collapsible.asp
 } */
 
 /* ----------------------------- View Workout Data ------------------------------------------------------- */
+.apex-chart {
+    width: 90%;
+}
+
 #view-woData-container {
     /* border: 1px red solid; */
     width: 100%;

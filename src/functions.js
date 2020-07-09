@@ -103,8 +103,7 @@ export const submitExercise = async (e) => {
     //----- Workout & Exercise Name
     const workoutName = gggP.getElementsByClassName("wo-name")[0].value;
     const exerName = gP.getElementsByClassName("exer-name-input")[0].value;
-    //error message if !workoutName
-    //error message if !exerName
+
     exerData.woName = workoutName;
     exerData.exName = exerName;
 
@@ -183,8 +182,6 @@ export const submitExercise = async (e) => {
         console.log("data after /submit-exercise: ", data);
 
         if (data == "success") {
-            removeMsgs();
-
             // render feedback message
             const goodMsg = document.createElement("div");
             goodMsg.classList.add("success-save");

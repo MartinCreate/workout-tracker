@@ -389,20 +389,6 @@ app.post("/save-workout", async (req, res) => {
             await db.insertExersByWrkt(id, wrktId, rows[0].exer_id);
         }
 
-        //------ I think these lines are made redundant be the for..of loop above, but brain is mush, so I'm keeping these lines just in case
-        // let exerIds = [];
-        // for (const exer of exers) {
-        //     console.log("exer in loop: ", exer);
-        //     const { rows } = await db.getExerId(id, exer);
-        //     exerIds.push(rows[0].exer_id);
-        // }
-        // console.log("exerIds: ", exerIds);
-        // for (const exer of exers) {
-        //     const ind = exers.indexOf(exer);
-        //     console.log("ind of current exer in loop: ", ind);
-        //     await db.insertExersByWrkt(id, wrktId, exerIds[ind]);
-        // }
-
         console.log("END OF /SAVE-WORKOUT");
         res.json("success");
     } catch (e) {
@@ -414,7 +400,6 @@ app.post("/save-workout", async (req, res) => {
                 "TypeError: Cannot read property 'exer_id' of undefined"
             )
         ) {
-            // res.json("Error: save each new exercise");
             res.json("Err: unsaved exers");
             return;
         }
@@ -696,21 +681,17 @@ app.post("/track-workout", async (req, res) => {
     res.json("success");
 });
 
-// ////------------------------------- /view-basic-wo-data route ---------------------------------------------- //
+////------------------------------------------- VIEW WORKOUT DATA ----------------------------------------------------------- //
+
+////------------------------------- /view-basic-wo-data route ---------------------------------------------- //
 app.get("/view-basic-wo-data", async (req, res) => {
-    console.log("We're in /view-basic-wo-data!");
+    console.log("We're in /view-basic-wo-data");
     const id = req.session.userId;
 
     let woData = {};
 
     try {
         const { rows } = await db.getWoSessions(id);
-        console.log("rows db.getWoSessions(): ", rows);
-
-        let test = "123456789";
-        test = test.substring(0, 5);
-
-        console.log("test: ", test);
 
         let seshIds = rows.map((sesh) => {
             return sesh.id;
@@ -727,16 +708,7 @@ app.get("/view-basic-wo-data", async (req, res) => {
             };
             return session;
         });
-        console.log("seshIds: ", seshIds);
 
-        // for (const s of seshData) {
-        //     const res = await db.getTrackedExers(s.seshId);
-        //     let exercises = [];
-        //     for (const r of res.rows) {
-        //         exercises.push(r.exer_name);
-        //     }
-        //     s.exers = exercises;
-        // }
         for (const s of seshData) {
             const res = await db.getTrackedExers(s.seshId);
             let exercises = [];
@@ -754,16 +726,36 @@ app.get("/view-basic-wo-data", async (req, res) => {
         for (const s of seshData) {
             for (const ex of s.exers) {
                 const res = await db.getTrackedSets(s.seshId, ex.exerId);
-                // console.log("res.rows: ", res.rows);
                 ex.sets = res.rows;
             }
         }
-        // console.log("seshData[0].exers: ", seshData[0].exers[0].sets);
 
-        console.log("seshData: ", seshData);
+        // console.log("seshData: ", seshData);
         res.json(seshData);
     } catch (e) {
         console.log("ERROR in /view-basic-wo-data: ", e);
+    }
+});
+
+////------------------------------- /chart-data route ---------------------------------------------- //
+app.post("/chart-data", async (req, res) => {
+    //I had to make it a POST request in order to use req.body
+    console.log("We're in /chart-data");
+    const id = req.session.userId;
+
+    console.log("req.body /chart-data: ", req.body);
+
+    try {
+        const { rows } = await db.getExerId(id, req.body.name);
+        const exerId = rows[0].exer_id;
+
+        const rawExerData = await db.getTrackedExerSets(id, exerId);
+        const exerData = rawExerData.rows;
+        console.log("exerData: ", exerData);
+
+        res.json(exerData);
+    } catch (err) {
+        console.log("ERROR in /chart-data: ", err);
     }
 });
 

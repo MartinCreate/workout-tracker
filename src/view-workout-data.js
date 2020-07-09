@@ -1,12 +1,10 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-// import { getPrivChatList, privChatMsg, clearChatMessages } from "./actions";
+import PopChart from "./apex-chart";
 
 import axios from "./axios";
 
 export default function ViewWoData() {
-    const dispatch = useDispatch();
     const [mounted, setMounted] = useState();
     const [woList, setWoList] = useState([]);
     const [woData, setWoData] = useState();
@@ -63,6 +61,10 @@ export default function ViewWoData() {
                 <Link to="/" className="back-home-link">
                     <p>Home</p>
                 </Link>
+
+                <div className="apex-chart">
+                    <PopChart />
+                </div>
 
                 <div id="view-woData-container">
                     <div className="basic-data-table">

@@ -407,16 +407,27 @@ module.exports.getWoSessions = (userId) => {
 module.exports.getTrackedExers = (seshId) => {
     return db.query(
         `
-        SELECT exer_name, exercise_id FROM track_workout_exercises WHERE wo_session_id = $1`,
+            SELECT exer_name, exercise_id FROM track_workout_exercises WHERE wo_session_id = $1`,
         [seshId]
     );
 };
 module.exports.getTrackedSets = (seshId, exerId) => {
     return db.query(
         `
-        SELECT set_number AS setNr, reps, val1, units1, val2, units2
-        FROM track_sets_table
-        WHERE wo_session_id = $1 AND exercise_id = $2`,
+                SELECT set_number AS setNr, reps, val1, units1, val2, units2
+                FROM track_sets_table
+                WHERE wo_session_id = $1 AND exercise_id = $2`,
         [seshId, exerId]
+    );
+};
+
+// ////// -------------------------------- /chart-data ------------------------------------------------//
+module.exports.getTrackedExerSets = (userId, exerId) => {
+    return db.query(
+        `
+        SELECT wo_session_id, set_number, reps, val1, units1, val2, units2, created_at AS date
+        FROM track_sets_table
+        WHERE user_id = $1 AND exercise_id = $2`,
+        [userId, exerId]
     );
 };
