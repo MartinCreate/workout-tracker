@@ -827,6 +827,13 @@ https://www.w3schools.com/howto/howto_js_collapsible.asp
     /* margin-top: 30px; */
     padding-bottom: 50px;
 }
+
+.chart-choice {
+    /* width: 500px;
+    height: 500px; */
+}
+
+/* --------- Hardcoded Table ----------------*/
 .basic-data-table {
     /* border: 1px blue solid; */
     width: 80%;

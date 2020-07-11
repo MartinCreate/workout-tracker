@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import PopChart from "./apex-chart";
+import { getExNames } from "./functions";
 
 import axios from "./axios";
 
@@ -9,28 +10,38 @@ export default function ViewWoData() {
     const [woList, setWoList] = useState([]);
     const [woData, setWoData] = useState();
     const [seshData, setSeshData] = useState();
+    const [exerNames, setExerNames] = useState([]);
+    const [renderEx, setRenderEx] = useState();
 
     useEffect(() => {
-        setMounted(true);
+        setMounted(true); //this is prob unnecessary
         console.log("View-Workout-Data Component Loaded");
 
+        loadExerNames();
         loadData();
     }, []);
-
-    // const findInd = (arr, prop, val) => {
-    //     for (var i = 0; i < arr.length; i++) {
-    //         if (arr[i][prop] === val) {
-    //             return i;
-    //         }
-    //     }
-    // };
 
     const loadData = async () => {
         console.log("loadData() is running");
 
         const { data } = await axios.get("/view-basic-wo-data");
-        console.log("data in loadData: ", data);
+        // console.log("data in loadData: ", data);
         setSeshData(data);
+    };
+
+    const loadExerNames = async () => {
+        const { data } = await axios.get("/get-ex-names");
+
+        for (let i = 0; i < data.length; i++) {
+            //this if..statement should be removed after I reset the tables (since, now, we can't have a blank-named exercise)
+            if (data[i].exercise_name == "") {
+                data.splice(i, 1);
+            }
+            data[i].low_exer = data[i].exercise_name.toLowerCase();
+        }
+        // console.log("data in loadExerNames: ", data);
+
+        setExerNames(data);
     };
 
     const collapse = (e) => {
@@ -53,6 +64,18 @@ export default function ViewWoData() {
         }
     };
 
+    // ---- new below
+    const renderExerChart = (e) => {
+        const currEl = e.currentTarget;
+        const parent = currEl.parentNode;
+        const exerEl = document.getElementById("chart_exers");
+        const exer = exerEl.options[exerEl.options.selectedIndex].innerHTML;
+        console.log("exer: ", exer);
+
+        setRenderEx(exer);
+    };
+    // ---- new above
+
     // --- Render HTML
     return (
         <div className="component-container">
@@ -62,8 +85,32 @@ export default function ViewWoData() {
                     <p>Home</p>
                 </Link>
 
+                {/* new below xxx */}
+                <div className="chart-choice">
+                    <label htmlFor="chart_exers">Choose Your Exercise:</label>
+                    <select name="chart_exers" id="chart_exers">
+                        {exerNames &&
+                            exerNames.map((ex) => (
+                                <option
+                                    value={ex.low_exer}
+                                    key={ex.exercise_name}
+                                >
+                                    {ex.exercise_name}
+                                </option>
+                            ))}
+                    </select>
+                    <br />
+                    <button
+                        className="show-chart"
+                        onClick={(e) => renderExerChart(e)}
+                    >
+                        Render Chart
+                    </button>
+                </div>
+                {/* new above */}
+
                 <div className="apex-chart">
-                    <PopChart />
+                    {renderEx && <PopChart renderEx={renderEx} />}
                 </div>
 
                 <div id="view-woData-container">

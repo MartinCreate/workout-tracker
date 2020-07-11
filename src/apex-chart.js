@@ -2,7 +2,8 @@ import React, { useEffect, useState, useRef } from "react";
 import Chart from "react-apexcharts";
 import axios from "./axios";
 
-export default function PopChart() {
+//props (renderEx) from view-workout-data.js
+export default function PopChart({ renderEx }) {
     const [options, setOptions] = useState({
         chart: {
             // background: "#f4f4f4",
@@ -79,19 +80,21 @@ export default function PopChart() {
     ]);
 
     useEffect(() => {
+        console.log("renderEx in apex-chart: ", renderEx);
         console.log("Apex-Chart component loaded!");
-        loadData();
+        loadData(renderEx);
     }, []);
 
-    const loadData = async () => {
-        //getDataOn specifications will be chosen from drop-down menus
+    const loadData = async (exer) => {
+        //xxx, get loadData to reload whenever "Render Chart" (in view-workout-data.js) is pressed
 
+        //change getDataOn.name by selecting from a dropdown menu of exercises
         const getDataOn = {
             type: "exercise",
-            name: "Overhead Press",
+            name: `${exer}`,
         };
 
-        console.log("getDataOn: ", getDataOn);
+        // console.log("getDataOn: ", getDataOn);
 
         const unit = "kg/set";
 
@@ -108,7 +111,7 @@ export default function PopChart() {
             let categories = data.map((s) => {
                 return s.date;
             });
-            console.log("categories: ", categories);
+            // console.log("categories: ", categories);
             setOptions({
                 ...options,
                 xaxis: {
@@ -128,7 +131,7 @@ export default function PopChart() {
                     return set.val2;
                 }
             });
-            console.log("yPoints: ", yPoints);
+            // console.log("yPoints: ", yPoints);
 
             setSeries([
                 {
