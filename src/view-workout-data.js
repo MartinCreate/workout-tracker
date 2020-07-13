@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import PopChart from "./apex-chart";
-import { getExNames } from "./functions";
+// import { getExNames } from "./functions";
 
 import axios from "./axios";
 
@@ -33,7 +33,7 @@ export default function ViewWoData() {
         const { data } = await axios.get("/get-ex-names");
 
         for (let i = 0; i < data.length; i++) {
-            //this if..statement should be removed after I reset the tables (since, now, we can't have a blank-named exercise)
+            //this if..statement should be removed after I reset the tables (we can't save a blank-named exercise)
             if (data[i].exercise_name == "") {
                 data.splice(i, 1);
             }
@@ -71,6 +71,9 @@ export default function ViewWoData() {
         const exerEl = document.getElementById("chart_exers");
         const exer = exerEl.options[exerEl.options.selectedIndex].innerHTML;
         console.log("exer: ", exer);
+
+        // let newData = {};
+        // newData.renderEx = exer;
 
         setRenderEx(exer);
     };
@@ -110,6 +113,7 @@ export default function ViewWoData() {
                 {/* new above */}
 
                 <div className="apex-chart">
+                    {/* <PopChart exerIn={renderEx} /> */}
                     {renderEx && <PopChart renderEx={renderEx} />}
                 </div>
 

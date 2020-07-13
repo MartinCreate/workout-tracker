@@ -80,14 +80,13 @@ export default function PopChart({ renderEx }) {
     ]);
 
     useEffect(() => {
-        console.log("renderEx in apex-chart: ", renderEx);
+        // console.log("renderEx in apex-chart: ", renderEx);
         console.log("Apex-Chart component loaded!");
         loadData(renderEx);
     }, []);
 
     const loadData = async (exer) => {
         //xxx, get loadData to reload whenever "Render Chart" (in view-workout-data.js) is pressed
-
         //change getDataOn.name by selecting from a dropdown menu of exercises
         const getDataOn = {
             type: "exercise",
@@ -143,18 +142,19 @@ export default function PopChart({ renderEx }) {
             console.log("ERROR in loadData in /apex-chart.js: ", err);
         }
     };
-    const click = () => {
-        setOptions({
-            ...options,
-            plotOptions: {
-                ...options.plotOptions,
-                bar: {
-                    ...options.plotOptions.bar,
-                    horizontal: !options.plotOptions.bar.horizontal,
-                },
-            },
-        });
-    };
+    //---- this is from traversy's example
+    // const click = () => {
+    //     setOptions({
+    //         ...options,
+    //         plotOptions: {
+    //             ...options.plotOptions,
+    //             bar: {
+    //                 ...options.plotOptions.bar,
+    //                 horizontal: !options.plotOptions.bar.horizontal,
+    //             },
+    //         },
+    //     });
+    // };
 
     const cleanDate = (date) => {
         const year = date.substring(0, 4);
