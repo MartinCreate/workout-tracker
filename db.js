@@ -431,3 +431,11 @@ module.exports.getTrackedExerSets = (userId, exerId) => {
         [userId, exerId]
     );
 };
+module.exports.getExerTagData = (userId) => {
+    return db.query(
+        `
+        SELECT * FROM track_exercise_tags
+        WHERE user_id = $1`,
+        [userId]
+    );
+};

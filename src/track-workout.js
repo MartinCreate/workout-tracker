@@ -418,7 +418,7 @@ export default function TrackWorkout() {
                                                             collapse(e)
                                                         }
                                                     >
-                                                        Tags
+                                                        Muscles
                                                     </button>
                                                     <div className="tags collapse">
                                                         <button

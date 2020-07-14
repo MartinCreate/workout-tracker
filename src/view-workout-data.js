@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import PopChart from "./apex-chart";
+import ScatterPlot from "./apex-scatter";
 // import { getExNames } from "./functions";
 
 import axios from "./axios";
@@ -12,7 +13,7 @@ export default function ViewWoData() {
     const [seshData, setSeshData] = useState();
     const [exerNames, setExerNames] = useState([]);
     const [renderEx, setRenderEx] = useState();
-    const [chartExer, setChartExer] = useState();
+    // const [renderSc, setRenderSc] = useState();
 
     useEffect(() => {
         // setMounted(true); //this is prob unnecessary
@@ -22,15 +23,10 @@ export default function ViewWoData() {
         loadData();
     }, []);
 
-    useEffect(() => {
-        renderEx && console.log("renderEx: ", renderEx);
-    }, [renderEx]);
-
     const loadData = async () => {
         // console.log("loadData() in view-workout-data is running");
 
         const { data } = await axios.get("/view-basic-wo-data");
-        // console.log("data in loadData: ", data);
         setSeshData(data);
     };
 
@@ -70,15 +66,6 @@ export default function ViewWoData() {
     };
 
     // ---- new below
-    // useEffect(() => {
-    //     if (chartExer) {
-    //         const exerEl = document.getElementById("chart_exers");
-    //         const exer = exerEl.options[exerEl.options.selectedIndex].innerHTML;
-    //         console.log("exer in useEffect: ", exer);
-
-    //         setRenderEx(exer);
-    //     }
-    // }, [chartExer]);
 
     const renderExerChart = (e) => {
         // const currEl = e.currentTarget;
@@ -86,9 +73,6 @@ export default function ViewWoData() {
         const exerEl = document.getElementById("chart_exers");
         const exer = exerEl.options[exerEl.options.selectedIndex].innerHTML;
         console.log("exer: ", exer);
-
-        // let newData = {};
-        // newData.renderEx = exer;
 
         setRenderEx(exer);
     };
@@ -120,7 +104,6 @@ export default function ViewWoData() {
                     <br />
                     <button
                         className="show-chart"
-                        // onClick={() => setChartExer(2)}
                         onClick={(e) => renderExerChart(e)}
                     >
                         Render Chart
@@ -129,9 +112,10 @@ export default function ViewWoData() {
                 {/* new above */}
 
                 <div className="apex-chart">
-                    {/* <PopChart renderEx={renderEx} /> */}
                     {renderEx && <PopChart renderEx={renderEx} />}
-                    {/* {renderEx && <p>The chosen exercise is {renderEx}</p>} */}
+                </div>
+                <div className="apex-scatterplot">
+                    <ScatterPlot />
                 </div>
 
                 <div id="view-woData-container">

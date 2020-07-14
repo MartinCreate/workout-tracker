@@ -209,7 +209,7 @@ export const createTagsDiv = () => {
     toggleTag.classList.add("toggle-tags");
     toggleTag.classList.add("toggle-button");
     toggleTag.addEventListener("click", (e) => collapse(e));
-    toggleTag.innerHTML = "Tags";
+    toggleTag.innerHTML = "Muscles";
 
     const addTagButton = document.createElement("button");
     addTagButton.classList.add("tag-add");

@@ -737,7 +737,7 @@ app.get("/view-basic-wo-data", async (req, res) => {
     }
 });
 
-////------------------------------- /chart-data route ---------------------------------------------- //
+////------------------------------- Charts & Graphs route ---------------------------------------------- //
 app.post("/chart-data", async (req, res) => {
     //I had to make it a POST request in order to use req.body
     console.log("We're in /chart-data");
@@ -756,6 +756,20 @@ app.post("/chart-data", async (req, res) => {
         res.json(exerData);
     } catch (err) {
         console.log("ERROR in /chart-data: ", err);
+    }
+});
+
+app.get("/scatter-plot", async (req, res) => {
+    console.log("We're in /scatter-plot");
+
+    const id = req.session.userId;
+
+    try {
+        const { rows } = await db.getExerTagData(id);
+        console.log("rows in getExerTagData: ", rows);
+        res.json(rows);
+    } catch (err) {
+        console.log("ERROR in /scatter-plot: ", err);
     }
 });
 
