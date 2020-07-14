@@ -4,6 +4,7 @@ import axios from "./axios";
 
 //props (renderEx) from view-workout-data.js
 export default function PopChart({ renderEx }) {
+    const [exToRender, setExToRender] = useState();
     const [options, setOptions] = useState({
         chart: {
             // background: "#f4f4f4",
@@ -80,20 +81,19 @@ export default function PopChart({ renderEx }) {
     ]);
 
     useEffect(() => {
-        // console.log("renderEx in apex-chart: ", renderEx);
         console.log("Apex-Chart component loaded!");
+        setExToRender(renderEx);
+    });
+
+    useEffect(() => {
         loadData(renderEx);
-    }, []);
+    }, [exToRender]);
 
     const loadData = async (exer) => {
-        //xxx, get loadData to reload whenever "Render Chart" (in view-workout-data.js) is pressed
-        //change getDataOn.name by selecting from a dropdown menu of exercises
         const getDataOn = {
             type: "exercise",
             name: `${exer}`,
         };
-
-        // console.log("getDataOn: ", getDataOn);
 
         const unit = "kg/set";
 
