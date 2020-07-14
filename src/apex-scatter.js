@@ -114,29 +114,19 @@ export default function ScatterPlot() {
             },
         },
     });
-    // var chart = new ApexCharts(document.querySelector("#chart"), options);
-    // chart.render();
-
-    // useEffect(() => {
-    //     console.log("Apex-Chart component loaded!");
-    //     setExToRender(renderEx);
-    // });
 
     useEffect(() => {
         loadScatterData();
     });
 
     const loadScatterData = async () => {
-        // const getDataOn = {
-        //     type: "exercise",
-        //     name: `${exer}`,
-        // };
-
-        // const unit = "kg/set";
-
         try {
             const { data } = await axios.get("/scatter-plot");
             console.log("data in apex-scatter: ", data);
+
+            //UP NEXT:
+            //--figure out how to get tag-names as y-axis points instead of the current numbers (max: 70)
+            //--make sure the date is in a format that apexcharts can understand
 
             // for (let i = 0; i < data.length; i++) {
             //     data[i].date = cleanDate(data[i].date);
